@@ -1,0 +1,178 @@
+body {
+    padding-bottom: 40px;
+}
+.facebook-share-box {
+    width: 100%;
+}
+.facebook-share-box .share {
+    clear: both;
+    background: white;
+    border: 2px solid #dddddd;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.facebook-share-box .share .arrow {
+    background: url(arrow.png) no-repeat #dddddd;
+    position: absolute;
+    width: 14px;
+    height: 10px;
+    left: 4px;
+    display: inline;
+    top: -10px;
+}
+
+.facebook-share-box .post-types li a {
+	color: #660066;
+	text-decoration: none;
+}
+
+.facebook-share-box .post-types li a.active {
+    color: #404040;
+}
+
+.facebook-share-box .post-types {
+    padding-left: 5px;
+}
+
+.facebook-share-box ul {
+    list-style: none;
+    margin-bottom: 9px;
+}
+
+.facebook-share-box .post-types li {
+    display: inline;
+    margin-right: 10px;
+}
+
+.message {
+    border-radius: 0;
+    border: none;
+}
+.panel {
+    border-radius: 0;
+    border: none;
+    margin-bottom: 0;
+}
+
+.privacy-dropdown {
+    width: 100px;
+}
+
+.facebook-comment-box {
+	background-color: #f5f5f5;
+	border: 2px solid #dddddd;
+	margin-top: 10px;
+}
+
+.facebook-comment-status {
+    clear: both;
+    background: white;
+    border: 2px solid #dddddd;
+    margin-bottom: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+    position: relative;
+	padding: 5px;
+}
+
+.facebook-comment-box img{
+	width: 15px;
+	height: 15px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 5px;
+	border: 2px solid #dddddd;
+}
+
+.facebook-comment-box a:hover{
+	color: #606;
+}
+
+.facebook-comment-box-reply a:hover{
+	color: #606;
+}
+
+.right-menu{
+	padding-bottom: 5px;
+	border: 2px solid #dddddd;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+
+.left-menu{
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding-bottom: 5px;
+	border: 2px solid #dddddd;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+
+.right-menu a:hover{
+	color: #606;
+}
+
+.right-menu img{
+	width: 15px;
+	height: 15px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 5px;
+	border: 2px solid #dddddd;
+}
+
+.right-menu ul{
+	list-style-type: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+.facebook-comment-box-reply {
+	width: 80%;
+	background-color: #f5f5f5;
+	border: 2px solid #dddddd;
+	border-top: hidden;
+}
+
+.facebook-comment-box-reply img{
+	width: 15px;
+	height: 15px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 5px;
+	border: 2px solid #dddddd;
+}
+
+.facebook-comment-status-reply {
+    clear: both;
+	background: white;
+    border: 2px solid #dddddd;
+    margin-bottom: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+    position: relative;
+	padding: 5px;
+}
+
+.facebook-comment-reply {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.facebook-search-area {
+	margin-left: 5px;
+	margin-right: 5px;
+	padding-top: 5px;
+}
+
+.help-container {
+	padding-top: 5px;	
+}
+
+.index-left-menu{
+	margin-left: 5px;
+	margin-right: 5px;
+}
