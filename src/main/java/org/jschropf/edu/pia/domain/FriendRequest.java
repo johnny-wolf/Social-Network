@@ -26,11 +26,14 @@ public class FriendRequest extends BaseObject{
 
 	@Column(name = "sourceId")
 	private long sourceId;
+	
 	@Column(name = "targetId") 
 	private long targetId;
+	
 	@Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP) 
 	private Date date;
+	
 	@Column(name = "status") 
 	private String status;
 	

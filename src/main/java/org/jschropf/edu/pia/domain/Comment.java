@@ -27,11 +27,14 @@ public class Comment extends BaseObject{
 
 	@Column(name = "postId") 
 	private long postId;
+	
 	@Column(name = "personId") 
 	private long personId;
+	
 	@Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP) 
 	private Date date;
+	
 	@Column(name = "text") 
 	private String text;
 	

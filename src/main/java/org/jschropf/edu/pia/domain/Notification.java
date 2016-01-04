@@ -25,11 +25,14 @@ public class Notification extends BaseObject{
 
 	@Column(name = "personId") 
 	private long personId;
+	
 	@Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP) 
 	private Date date;
+	
 	@Column(name = "text") 
 	private String text;
+	
 	@Column(name = "url") 
 	private String url;
 	

@@ -1,8 +1,15 @@
 package org.jschropf.edu.pia.domain;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedQuery;
+import javax.persistence.NamedQueries;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,37 +22,50 @@ import org.apache.commons.lang3.StringUtils;
  */
 @Entity
 @Table(name = "jschropf_SM_users")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
+    @NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.id = :id"),
+    @NamedQuery(name = "User.findByUserName", query = "SELECT u FROM User u WHERE u.username = :username"),
+    @NamedQuery(name = "User.findByFirstName", query = "SELECT u FROM User u WHERE u.fName = :firstName"),
+    @NamedQuery(name = "User.findByLastName", query = "SELECT u FROM User u WHERE u.lName = :lastName"),
+    @NamedQuery(name = "User.findByDateOfBirth", query = "SELECT u FROM User u WHERE u.birthDate = :dateOfBirth"),
+    @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password"),
+    @NamedQuery(name = "User.findByPicture", query = "SELECT u FROM User u WHERE u.picture = :picture")}) 
 public class User extends BaseObject {
     /**
      * Login, unique
      */
-	//@Column(name = "username")
+	@Column(name = "username")
     private String username;
     /**
      * Secret for signing-in
      */
-    //@Column(name = "password") 
+    @Column(name = "password") 
     private String password;
 
-    //@Column(name = "firstName") 
+    @Column(name = "firstName") 
     private String fName;
     
-    //@Column(name = "lastName") 
+    @Column(name = "lastName") 
     private String lName;
-    /**
-     * Profile picture
-     */
-    private Picture picture;
+    
+    @Column(name = "picture")
+    private String picture; 
+    
+    @Column(name = "birthDate")
+    @Temporal(TemporalType.TIMESTAMP) 
+	private Date birthDate;
 
     public User() {
     }
     
-    public User(String username, String password, Picture picture, String fName, String lName){
+    public User(String username, String password, String fName, String lName, Date birthDate){
     	this.username = username;
         this.password = password;
         this.fName = fName;
         this.lName = lName;
-        this.picture = picture;
+        this.birthDate = birthDate;
     }
     
     public User(String username, String password) {
@@ -103,11 +123,11 @@ public class User extends BaseObject {
 		this.lName = lName;
 	}
 
-	public Picture getPicture() {
+	public String getPicture() {
 		return picture;
 	}
 
-	public void setPicture(Picture picture) {
+	public void setPicture(String picture) {
 		this.picture = picture;
 	}
 

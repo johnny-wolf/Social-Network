@@ -1,10 +1,12 @@
 package org.jschropf.edu.pia.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.ejb.EJB;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -15,8 +17,12 @@ import org.jschropf.edu.pia.domain.Post;
 import org.jschropf.edu.pia.domain.User;
 
 public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao{
+	@EJB
 	private UserDao userDao;
+	@EJB
 	private NotificationDao notificationDao;
+	@EJB
+	private PictureDao pictureDao; 
 	
 	public PostDaoJpa(EntityManager em) {
         super(em, Post.class);
@@ -62,6 +68,21 @@ public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao{
         User poster = userDao.findById(posterId);
         notificationDao.createNotification(poster.getfName() + " " + poster.getlName() + " created a new post on your wall.", "wall", ownerId);
         return true;
+    }
+    
+    public List<Post> topTenFor(Integer personId){
+        Query q = em.createQuery("SELECT p FROM Post p WHERE p.ownerId=:personId ORDER BY p.popularity DESC");
+        q.setParameter("personId", personId);
+        //how to do a sql limit?
+        List<Post> allResults = q.getResultList();
+        List<Post> topTen = new ArrayList<Post>();
+        
+        int restrict = (allResults.size() < 10) ? allResults.size() : 10;
+        for(int i = 0; i < restrict; i++) {
+            topTen.add(allResults.get(i));
+        }
+        
+        return topTen;
     } 
     
     public List<Post> wallFor(Integer personId){

@@ -10,24 +10,62 @@
     <title></title>
 </head>
 <body>
-
+<c:if test="${not empty sessionScope.user}">
+	<c:redirect url="/Wall.jsp" />
+</c:if>
+<jsp:include page="header.jsp"/>
 <c:if test="${not empty requestScope.err}">
     <p>
         Error: ${requestScope.err}
     </p>
 </c:if>
+<div class="container">
+        <div class="col-sm-6 col-md-6 index-left-menu">
+        	<h1>Zaregistrovat se</h1>
+            <p>ITNet byl, je a bude zdarma</p>
+            <p>* povinné údaje</p>
+            <!-- TODO: Style the form into two column layout, so that each group/fieldset is one column -->
 
-<form action="/login" method="post">
-    <label for="username">Login:&nbsp;</label>
-    <input type="text" id="username" name="username">
-    <label for="pwd">Password:&nbsp;</label>
-    <input type="password" id="pwd" name="password">
-    <input type="submit" value="Login">
-</form>
-
-<p>
-    <a href="register">Register</a>
-</p>
+            <form name="new_user_form" action="register" method="post">
+                <div>
+                    <div class="form-group">
+                        <label for="username">*Uživatelské jméno:</label>
+                        <input class="form-control" type="text" id="username" name="username"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="pass">*Heslo:</label>
+                        <input class="form-control" type="password" id="pass" name="password"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="pass2">*Heslo znovu:</label>
+                        <input class="form-control" type="password" id="pass2" name="confirmPwd"/>
+                    </div>
+					<div class="form-group">
+                        <label for="username">Jméno:</label>
+                        <input class="form-control" type="text" id="fname" name="fname"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Příjmení:</label>
+                        <input class="form-control" type="text" id="lname" name="lname"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthdate">Datum narození:</label>
+                        <input class="form-control" type="date" id="birthdate" name="birthdate" placeholder="dd/MM/yyyy"/>
+                    </div>
+                    <%--<div class="form-group">
+                        <label for="email">E-mail:</label>
+                        <input class="form-control" type="text" id="email" name="email"/>
+                    </div> --%>
+                    <div>
+                    <button class="btn btn-primary" type="submit" value="Potvrdit">Potvrdit</button>
+                    <button class="btn btn-default" type="reset" value="Reset">Reset</button>
+                	</div>
+                </div>
+            </form>	
+        </div>
+        <div class="col-sm-6 col-md-6">
+        </div>
+    </div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

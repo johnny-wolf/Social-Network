@@ -27,5 +27,10 @@ public interface UserManager {
      */
     void register(User newUser) throws UserValidationException;
 
-
+    /**
+     * 
+     * @param username
+     * @return
+     */
+    public long userIdFinder(String username);
 }

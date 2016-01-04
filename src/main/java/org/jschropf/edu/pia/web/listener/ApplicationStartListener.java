@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebListener;
 
 import org.jschropf.edu.pia.ApplicationContext;
 import org.jschropf.edu.pia.web.filter.AuthenticationGuard;
+import org.jschropf.edu.pia.web.servlet.CreatePost;
 import org.jschropf.edu.pia.web.servlet.Login;
 import org.jschropf.edu.pia.web.servlet.Register;
 import org.jschropf.edu.pia.web.servlet.SecretServlet;
@@ -30,6 +31,7 @@ public class ApplicationStartListener implements ServletContextListener {
         sce.getServletContext().addServlet("login", new Login(ctx.getAuthenticationService())).addMapping("/login");
         sce.getServletContext().addServlet("register", new Register(ctx.getUserManager())).addMapping("/register");
         sce.getServletContext().addServlet("secret", new SecretServlet()).addMapping("/secret/vip");
+        sce.getServletContext().addServlet("createPost", new CreatePost(ctx.getUserManager(), ctx.getPostManager())).addMapping("/createPost");
 
         sce.getServletContext().addFilter("authFilter", new AuthenticationGuard(ctx.getAuthenticationService())).addMappingForUrlPatterns(null, false, "/secret/*");
     }

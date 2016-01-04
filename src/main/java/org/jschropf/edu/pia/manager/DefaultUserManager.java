@@ -19,7 +19,7 @@ public class DefaultUserManager implements UserManager {
         this.userDao = userDao;
         this.encoder = encoder;
     }
-
+    
     @Override
     public boolean authenticate(String username, String password) {
         User u = userDao.findByUsername(username);
@@ -49,5 +49,12 @@ public class DefaultUserManager implements UserManager {
             userDao.rollbackTransaction();
         }
         userDao.commitTransaction();
+    }
+    
+    @Override
+    public long userIdFinder(String username){
+    	User u = userDao.findByUsername(username);
+    	System.out.println(u);
+    	return u.getId();
     }
 }

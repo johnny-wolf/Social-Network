@@ -1,0 +1,4 @@
+org\jschropf\edu\pia\manager\PostManager.class
+org\jschropf\edu\pia\manager\DefaultPostManager.class
+org\jschropf\edu\pia\web\servlet\CreatePost.class
+org\jschropf\edu\pia\domain\PostValidationException.class

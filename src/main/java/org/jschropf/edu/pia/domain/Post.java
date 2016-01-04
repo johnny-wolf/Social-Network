@@ -38,16 +38,20 @@ import org.apache.commons.lang3.StringUtils;
 }) 
 public class Post extends BaseObject{
 	
-	//@Column(name = "date")
-    //@Temporal(TemporalType.TIMESTAMP) 
+	@Column(name = "date")
+    @Temporal(TemporalType.TIMESTAMP) 
 	private Date date;
-    //@Column(name = "text") 
+	
+    @Column(name = "text") 
 	private String text;
-    //@Column(name = "title")
+    
+    @Column(name = "title")
 	private String title;
-    //@Basic(optional = false)
+    
+    @Basic(optional = false)
 	private long ownerId;
-    //@Column(name = "popularity") 
+    
+    @Column(name = "popularity") 
 	private int popularity;
 
 	public Post() {
@@ -126,7 +130,7 @@ public class Post extends BaseObject{
     }
 	
     @ManyToOne
-    @JoinColumn (name="posterId, nullable=false")
+    @JoinColumn (name="posterId")
     private User poster;
     
     public User getPoster(){

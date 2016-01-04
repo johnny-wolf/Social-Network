@@ -20,17 +20,18 @@ import org.apache.commons.lang3.StringUtils;
     @NamedQuery(name = "Picture.findByImage", query = "SELECT p FROM Picture p WHERE p.image = :image")}) 
 public class Picture extends BaseObject{
 	
-	//@Column(name = "image") 
+	@Column(name = "image") 
 	private String image;
-	//@Column(name = "postId") 
-	private int postId;
+	
+	/*@Column(name = "postId") 
+	private int postId;*/
 	
 	public Picture(){
 	}
 	
-	public Picture(int postId){
+	/*public Picture(int postId){
 		this.postId = postId;
-	}
+	}*/
 
 	/*
     ########### MAPPINGS #####################
@@ -44,18 +45,18 @@ public class Picture extends BaseObject{
 		this.image = image;
 	}
 
-	public int getPostId() {
+	/*public int getPostId() {
 		return postId;
 	}
 
 	public void setPostId(int postId) {
 		this.postId = postId;
-	}
+	}*/
 	
 	@Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Picture{");
-        sb.append("postId='").append(postId).append('\'');
+        //sb.append("postId='").append(postId).append('\'');
         sb.append("\nimage='").append(image).append('\'');
         sb.append('}');
         return sb.toString();

@@ -41,6 +41,7 @@ public class UserDaoJpa extends GenericDaoJpa<User> implements UserDao, Serializ
         	User temp = q.getSingleResult();
             return temp;
         } catch (NoResultException e) {
+        	System.out.println("No user with id: "+id+" was found");
             //no result found, ensuring the behaviour described by interface specification
             //see javadoc of the findByUsername method.
             return null;

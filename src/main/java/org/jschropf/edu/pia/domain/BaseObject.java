@@ -16,6 +16,7 @@ import javax.persistence.Transient;
 @MappedSuperclass
 public class BaseObject {
 	
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id") 
@@ -30,8 +31,6 @@ public class BaseObject {
         return id == null;
     }
 
-    @Id
-    @GeneratedValue
     public Long getId() {
         return id;
     }
