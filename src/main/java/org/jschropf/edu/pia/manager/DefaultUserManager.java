@@ -4,12 +4,14 @@ import org.jschropf.edu.pia.dao.UserDao;
 import org.jschropf.edu.pia.domain.User;
 import org.jschropf.edu.pia.domain.UserValidationException;
 import org.jschropf.edu.pia.utils.Encoder;
+import org.springframework.stereotype.Service;
 
 /**
  * Date: 26.11.15
  *
  * @author Jakub Danek
  */
+@Service
 public class DefaultUserManager implements UserManager {
 
     private UserDao userDao;

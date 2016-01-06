@@ -7,12 +7,14 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.jschropf.edu.pia.domain.User;
+import org.springframework.stereotype.Repository;
 
 /**
  * Date: 26.11.15
  *
  * @author Jakub Danek
  */
+@Repository
 public class UserDaoJpa extends GenericDaoJpa<User> implements UserDao, Serializable {
     private static final long serialVersionUID = 1L;
     public UserDaoJpa(EntityManager em) {

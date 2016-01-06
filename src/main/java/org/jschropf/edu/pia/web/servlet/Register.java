@@ -7,17 +7,19 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jschropf.edu.pia.ApplicationContext;
 import org.jschropf.edu.pia.domain.User;
 import org.jschropf.edu.pia.domain.UserValidationException;
 import org.jschropf.edu.pia.manager.UserManager;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * Servlet handling user registration requests.
@@ -37,21 +39,16 @@ public class Register extends HttpServlet {
     private static final String ERROR_ATTRIBUTE = "err";
 
     private UserManager userManager;
+    private EntityManager em;
 
-    public Register(UserManager userManager) {
+    public Register(UserManager userManager, EntityManager em) {
         this.userManager = userManager;
-    }
-
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
-        sdf.setLenient(true);
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
+        this.em = em;
     }
     
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("WEB-INF/pages/register.jsp").forward(req, resp);
+        req.getRequestDispatcher("index.jsp").forward(req, resp);
     }
 
     @Override
@@ -85,7 +82,9 @@ public class Register extends HttpServlet {
         		userManager.register(new User(username, password, fname, lname, convertUtilDateToSqlDate(bdate)));
         	else
         		userManager.register(new User(username, password, fname, lname, null));
-            resp.sendRedirect("/Wall.jsp");  //not perfect, user should get a message registration was successful!
+        	Query query = em.createNamedQuery("User.findByUserName", User.class).setParameter("username", username);
+            User result = (User)query.getSingleResult();
+            resp.sendRedirect("/Wall.jsp?ownerId="+result.getId());  //not perfect, user should get a message registration was successful!
         } catch (UserValidationException e) {
             errorDispatch(e.getMessage(), req, resp);
         }

@@ -5,6 +5,7 @@ import org.jschropf.edu.pia.dao.FriendRequestDao;
 import org.jschropf.edu.pia.dao.PostDao;
 import org.jschropf.edu.pia.dao.UserDao;
 import org.jschropf.edu.pia.dao.UserDaoJpa;
+import org.jschropf.edu.pia.domain.Post;
 import org.jschropf.edu.pia.domain.User;
 import org.jschropf.edu.pia.manager.PostManager;
 import org.jschropf.edu.pia.manager.UserManager;
@@ -12,6 +13,7 @@ import org.jschropf.edu.pia.manager.UserManager;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -31,8 +33,8 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-@WebServlet(name = "CreatePostServlet", urlPatterns = {"/create_post"})
-public class CreatePost extends HttpServlet {
+//@WebServlet(name = "CreatePost", urlPatterns = {"/createPost"})
+public class CreatePost extends HttpServlet {	
 	@EJB
     private UserDao userDao;
 	@EJB
@@ -44,9 +46,10 @@ public class CreatePost extends HttpServlet {
 	@EJB
 	private PostManager postManager;
 	
-	public CreatePost(UserManager userManager, PostManager postManager){
-		this.userManager = userManager;
+	public CreatePost(PostManager postManager, FriendRequestDao friendRequestDao, PostDao postDao){
 		this.postManager = postManager;
+		this.friendRequestDao = friendRequestDao;
+		this.postDao = postDao;
 	}
 	
     /** 
@@ -58,29 +61,38 @@ public class CreatePost extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(true);
         String username = (String)session.getAttribute("user");
-        System.out.println("searching for user: "+username);
-        Long personId = userManager.userIdFinder(username);
+        //System.out.println("searching for user: "+username);
+        Long personId = (Long)session.getAttribute("userId");
+        ServletContext ctx = getServletConfig().getServletContext();
         
         
         PrintWriter out = response.getWriter();
        
         try {
-                    
+        	boolean isMultipart = ServletFileUpload.isMultipartContent(request);     
             //if (isMultipart) {
                 // Create a factory for disk-based file items
                 FileItemFactory factory = new DiskFileItemFactory();
                 ServletFileUpload upload = new ServletFileUpload(factory);
                 
                 List<FileItem> items = upload.parseRequest(request);
-
-                String title = items.get(0).getString();
-                String text = items.get(1).getString();
                 
+                for (FileItem i : items) {
+					System.out.println(i.toString());
+				}
+                String title = items.get(0).getString();
+                System.out.println("Loaded title: "+title);
+                String text = items.get(1).getString();
+                System.out.println("Loaded text: "+text);
+                
+                /*System.out.println("Loading Picture");
                 FileItem picture = items.get(2);
                 
+                if(picture !=null){
                 String pictureFilename = null;
                 if(!picture.getName().equals("")) {
                     pictureFilename = "/a" + (new Random()).nextLong() + picture.getName();
@@ -88,32 +100,43 @@ public class CreatePost extends HttpServlet {
                 
                 File uploadedFile = new File("docroot/" + pictureFilename);
                 picture.write(uploadedFile);
+                }*/
 	
                 //String link = items.get(4).getString();
                 
-                Long ownerId = null;
-                if (items.get(5).getString() != null && !items.get(5).getString().equals("null")) {
-                    ownerId = Long.parseLong(items.get(5).getString());
-                } else {
+                System.out.println("Loading poster Id: "+items.get(3).getString());
+                Long ownerId = (Long)request.getAttribute("ownerId");
+                if (items.get(3).getString() != null && !items.get(3).getString().equals("null")) {
+                	System.out.println("Parsing id to long");
+                    ownerId = Long.parseLong(items.get(3).getString());
+                } else{
+                	System.out.println("Poster is owner of the wall");
+                    ownerId = personId;
+                }
+                
+                if(ownerId.equals(personId)){
+                	System.out.println("Poster is owner of the wall");
                     ownerId = personId;
                 }
                 
             //}
+                
 		if(!personId.equals(ownerId) && !friendRequestDao.areFriends(personId, ownerId)) {
-		    out.println("You do not have permission to post here");
+			response.sendRedirect("wall?ownerId=" + ownerId + "&FriendError=noFriend");
 		    return;
 		}
             
-
-            if(postDao.createPost(title, text, personId, ownerId, pictureFilename)) {
+			System.out.println("releasing post");
+			Date date = new Date();
+			Post temp = postDao.createPost(title, text, personId, ownerId);
+            postManager.releasePost(temp, personId);
+            //temp = postDao.findByTexts(text, title);
+            //postDao.updatePostId(personId, temp.getId());
                 response.sendRedirect("wall?ownerId=" + ownerId);
-                return;
-            } else {
-                out.println("failure");
-            }
+            
         } catch (Exception e) {
             //handle the exception here
-            System.out.println(e);
+            System.out.println("error: "+e);
         }
     }
 

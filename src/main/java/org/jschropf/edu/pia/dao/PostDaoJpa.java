@@ -15,7 +15,9 @@ import javax.persistence.TypedQuery;
 import org.jschropf.edu.pia.domain.Picture;
 import org.jschropf.edu.pia.domain.Post;
 import org.jschropf.edu.pia.domain.User;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao{
 	@EJB
 	private UserDao userDao;
@@ -24,12 +26,15 @@ public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao{
 	@EJB
 	private PictureDao pictureDao; 
 	
-	public PostDaoJpa(EntityManager em) {
+	public PostDaoJpa(EntityManager em, UserDao userDao, NotificationDao notificationDao) {
         super(em, Post.class);
+        this.userDao = userDao;
+        this.notificationDao = notificationDao;
     }
 
     @Override
     public Post findByPostId(long id) {
+    	System.out.println("Searching for post with id: "+id);
         TypedQuery<Post> q = em.createQuery("SELECT p FROM Post p WHERE p.id = :pid", Post.class);
         q.setParameter("pid", id);
         try {
@@ -41,20 +46,24 @@ public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao{
         }
     }
     
-    public boolean createPost(String title, String text, long posterId, long ownerId, String picture) {        
-        Post post = new Post();
+    public Post createPost(String title, String text, long posterId, long ownerId) {        
+        System.out.println("Constructing post - setting parameters");
+    	Post post = new Post();
         post.setTitle(title);
         post.setText(text);
         //post.setPosterId(posterId);
+        System.out.println("  Setting poster");
         post.setPoster(userDao.findById(posterId));
+        System.out.println("  Setting poster done: \n"+post.getPoster().toString());
         post.setOwnerId(ownerId);
         post.setDate(new Date());
         post.setPopularity(0);
+        System.out.println("Constructing post - done");
         //em.persist(post);
         
         //post = findByAttributes(post.getTitle(), post.getText(), post.getOwnerId(), post.getDate());
         
-        if(picture != null && !picture.equals("")) {
+        /*if(picture != null && !picture.equals("")) {
             // pictureDao.createPicture(picture, post.getId());
 	    Set<Picture> pictures = new HashSet<Picture>();
 	    Picture pictureEntity = new Picture();
@@ -62,15 +71,17 @@ public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao{
 	    pictureEntity.setPost(post);
 	    pictures.add(pictureEntity);
 	    post.setPictures(pictures);
-        }
-        em.persist(post);
-
+        }*/
+        //em.persist(post);
         User poster = userDao.findById(posterId);
-        notificationDao.createNotification(poster.getfName() + " " + poster.getlName() + " created a new post on your wall.", "wall", ownerId);
-        return true;
+        System.out.println("Constructing notification");
+        if(notificationDao.createNotification(poster.getfName() + " " + poster.getlName() + " created a new post on your wall.", "wall", ownerId))
+        	System.out.println("Constructing notification done");
+        return post;
     }
     
-    public List<Post> topTenFor(Integer personId){
+    @Override
+    public List<Post> topTenFor(Long personId){
         Query q = em.createQuery("SELECT p FROM Post p WHERE p.ownerId=:personId ORDER BY p.popularity DESC");
         q.setParameter("personId", personId);
         //how to do a sql limit?
@@ -85,7 +96,31 @@ public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao{
         return topTen;
     } 
     
-    public List<Post> wallFor(Integer personId){
+    @Override
+    public void updatePostId(Long posterId, Long postId){
+    	Query q = em.createQuery("UPDATE Post SET posterId=:personId WHERE id=:postId");
+    	q.setParameter("personId", posterId);
+    	q.setParameter("postId", postId);
+    	q.executeUpdate();
+    }
+    
+    @Override
+    public Post findByDate(Date date){
+    	java.sql.Date sDate = new java.sql.Date(date.getTime());
+    	Query q = em.createQuery("SELECT p FROM Post p WHERE p.date=:postDate", Post.class);
+    	q.setParameter("postDate", sDate);
+    	return (Post)q.getSingleResult();
+    }
+    
+    @Override
+    public Post findByTexts(String text, String title){
+    	Query q = em.createQuery("SELECT p FROM Post p WHERE p.text=:postText AND p.title=:postTitle");
+    	q.setParameter("postText", text);
+    	q.setParameter("postTitle", title);
+    	return (Post)q.getSingleResult();
+    }
+    
+    public List<Post> wallFor(Long personId){
         Query q = em.createQuery("SELECT p FROM Post p WHERE p.ownerId=:personId ORDER BY p.date DESC");
         q.setParameter("personId", personId);
         return q.getResultList();

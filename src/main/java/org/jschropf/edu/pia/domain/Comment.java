@@ -2,6 +2,8 @@ package org.jschropf.edu.pia.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,9 +30,6 @@ public class Comment extends BaseObject{
 	@Column(name = "postId") 
 	private long postId;
 	
-	@Column(name = "personId") 
-	private long personId;
-	
 	@Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP) 
 	private Date date;
@@ -53,14 +52,6 @@ public class Comment extends BaseObject{
 		this.postId = postId;
 	}
 
-	public long getPersonId() {
-		return personId;
-	}
-
-	public void setPersonId(long personId) {
-		this.personId = personId;
-	}
-
 	public Date getDate() {
 		return date;
 	}
@@ -78,12 +69,44 @@ public class Comment extends BaseObject{
 	} 
 	
 	@Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (getId() != null ? getId().hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Comment)) {
+            return false;
+        }
+        Comment other = (Comment) object;
+        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.getId().equals(other.getId()))) {
+            return false;
+        }
+        return true;
+    } 
+	
+	@Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Comment{");
-        sb.append("person id='").append(personId).append('\'');
+        sb.append("person id='").append(commenter.getId()).append('\'');
         sb.append("\ndate='").append(date).append('\'');
         sb.append("\ntext='").append(text).append('\'');
         sb.append('}');
         return sb.toString();
     }
+	
+	@ManyToOne
+	@JoinColumn (name="personId")
+	private User commenter;
+	    
+	public User getCommenter(){
+		return commenter;
+	}
+	    
+	public void setCommenter(User commenter){
+		this.commenter = commenter;
+	} 
 }

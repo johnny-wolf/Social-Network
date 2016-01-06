@@ -8,7 +8,7 @@
 </head>
 <body>
 <c:if test="${not empty sessionScope.user}">
-	<jsp:include page="Wall.jsp"/>
+	<jsp:include page="Wall.jsp?<%= session.getAttribute("ownerId") %>"/>
 </c:if>
 </body>
 </html>

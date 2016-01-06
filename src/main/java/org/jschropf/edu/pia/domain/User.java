@@ -150,7 +150,10 @@ public class User extends BaseObject {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("User{");
+        sb.append("id='").append(getId()).append('\'');
         sb.append("username='").append(username).append('\'');
+        sb.append("first name='").append(fName).append('\'');
+        sb.append("last name='").append(lName).append('\'');
         sb.append('}');
         return sb.toString();
     }

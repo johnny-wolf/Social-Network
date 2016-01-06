@@ -9,7 +9,9 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.jschropf.edu.pia.domain.Notification;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class NotificationDaoJpa extends GenericDaoJpa<Notification> implements NotificationDao{
 	public NotificationDaoJpa(EntityManager em) {
         super(em, Notification.class);
@@ -29,11 +31,13 @@ public class NotificationDaoJpa extends GenericDaoJpa<Notification> implements N
     } 
 	
 	public boolean createNotification(String text, String url, long personId) {
-        Notification notification = new Notification();
+		System.out.println("Creating Notification - Setting parameters");
+        Notification notification = new Notification(text, personId, new Date(), url);
         notification.setText(text);
         notification.setDate(new Date());
         notification.setUrl(url);
         notification.setPersonId(personId);
+        System.out.println("Creating Notification - Setting parameters - Done");
         em.persist(notification);
         return true;
     }

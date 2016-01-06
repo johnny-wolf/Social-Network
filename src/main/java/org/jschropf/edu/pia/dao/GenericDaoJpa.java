@@ -3,6 +3,7 @@ package org.jschropf.edu.pia.dao;
 import javax.persistence.EntityManager;
 
 import org.jschropf.edu.pia.domain.BaseObject;
+import org.springframework.stereotype.Repository;
 
 /**
  * JPA implementation of the {@link GenericDao} interface.
@@ -11,6 +12,7 @@ import org.jschropf.edu.pia.domain.BaseObject;
  *
  * @author Jakub Danek
  */
+@Repository
 public class GenericDaoJpa<T extends BaseObject> implements GenericDao<T> {
 
     protected EntityManager em;

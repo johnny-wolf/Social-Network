@@ -54,8 +54,17 @@ public class Post extends BaseObject{
     @Column(name = "popularity") 
 	private int popularity;
 
-	public Post() {
+    public Post(){}
+	public Post(String title,String text, Long posterId, Long ownerId, int popularity, Date date) {
+		this.date = date;
+		this.ownerId = ownerId;
+		this.text = text;
+		this.title = title;
     }
+	
+	public Post(String title, String text, Long posterId,Long ownerId) {
+		this(title, text, posterId, ownerId, 0, new Date()); 
+	}
 	
 	/*
     ########### MAPPINGS #####################
@@ -109,14 +118,16 @@ public class Post extends BaseObject{
 	@Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Post{");
+        sb.append("post id='").append(getId()).append('\'');
         sb.append("owner id='").append(ownerId).append('\'');
         sb.append("\ndate='").append(date).append('\'');
         sb.append("\ntext='").append(text).append('\'');
+        sb.append("\ntitle='").append(title).append('\'');
         sb.append('}');
         return sb.toString();
     }
 	
-	@OneToMany (targetEntity=Picture.class, mappedBy="post", cascade=CascadeType.PERSIST)
+	/*@OneToMany (targetEntity=Picture.class, mappedBy="post", cascade=CascadeType.PERSIST)
     private Set<Picture> pictures = new HashSet<Picture>();
 
     public Set<Picture> getPictures() {
@@ -127,7 +138,7 @@ public class Post extends BaseObject{
     public void setPictures(Set<Picture> pictures) {
     	
 	   this.pictures = pictures;
-    }
+    }*/
 	
     @ManyToOne
     @JoinColumn (name="posterId")

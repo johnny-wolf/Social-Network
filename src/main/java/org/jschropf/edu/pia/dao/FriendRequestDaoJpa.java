@@ -9,7 +9,9 @@ import javax.persistence.TypedQuery;
 
 import org.jschropf.edu.pia.domain.Comment;
 import org.jschropf.edu.pia.domain.FriendRequest;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements FriendRequestDao {
 	public FriendRequestDaoJpa(EntityManager em) {
         super(em, FriendRequest.class);

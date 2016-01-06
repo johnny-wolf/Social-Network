@@ -24,7 +24,6 @@
         	<h1>Zaregistrovat se</h1>
             <p>ITNet byl, je a bude zdarma</p>
             <p>* povinné údaje</p>
-            <!-- TODO: Style the form into two column layout, so that each group/fieldset is one column -->
 
             <form name="new_user_form" action="register" method="post">
                 <div>

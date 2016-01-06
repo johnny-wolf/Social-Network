@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Notification extends BaseObject{
 
 	@Column(name = "personId") 
-	private long personId;
+	private Long personId;
 	
 	@Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP) 
@@ -40,20 +40,22 @@ public class Notification extends BaseObject{
 		
 	}
 	
-	public Notification( String text, long personId) {
+	public Notification( String text, long personId, Date date, String url) {
         this.text = text;
         this.personId = personId;
+        this.date = date;
+        this.url = url;
     }
 
 	/*
     ########### MAPPINGS #####################
      */
 	
-	public long getPersonId() {
+	public Long getPersonId() {
 		return personId;
 	}
 
-	public void setPersonId(long personId) {
+	public void setPersonId(Long personId) {
 		this.personId = personId;
 	}
 

@@ -6,7 +6,7 @@ import org.jschropf.edu.pia.domain.Notification;
 
 public interface NotificationDao extends GenericDao<Notification>{
 
-	Notification findByNotificationId(long id);
+	public Notification findByNotificationId(long id);
 	
 	public boolean createNotification(String text, String url, long personId);
 

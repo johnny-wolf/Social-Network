@@ -5,7 +5,9 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.jschropf.edu.pia.domain.Picture;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class PictureDaoJpa extends GenericDaoJpa<Picture> implements PictureDao{
 	
 	public PictureDaoJpa(EntityManager em) {

@@ -15,6 +15,8 @@ import org.jschropf.edu.pia.dao.PostDao;
 import org.jschropf.edu.pia.dao.PostDaoJpa;
 import org.jschropf.edu.pia.dao.UserDao;
 import org.jschropf.edu.pia.dao.UserDaoJpa;
+import org.jschropf.edu.pia.manager.CommentManager;
+import org.jschropf.edu.pia.manager.DefaultCommentManager;
 import org.jschropf.edu.pia.manager.DefaultPostManager;
 import org.jschropf.edu.pia.manager.DefaultUserManager;
 import org.jschropf.edu.pia.manager.PostManager;
@@ -22,7 +24,7 @@ import org.jschropf.edu.pia.manager.UserManager;
 import org.jschropf.edu.pia.utils.Encoder;
 import org.jschropf.edu.pia.utils.PasswordHashEncoder;
 import org.jschropf.edu.pia.web.auth.AuthenticationService;
-//import org.jschropf.edu.pia.web.servlet.CreatePost;
+import org.jschropf.edu.pia.web.servlet.CreatePost;
 
 /**
  * Application context holds references to all parts of the application,
@@ -49,26 +51,29 @@ public class ApplicationContext {
     //business
     private UserManager userManager;
     private PostManager postManager;
+    private CommentManager commentManager;
     private Encoder encoder;
 
     //web
     private AuthenticationService authenticationService;
-    //private CreatePost createPost;
+    private CreatePost createPost;
 
     public ApplicationContext() {
         //TODO persistence unit name should be taken from a property file, not hard-coded!
         em = Persistence.createEntityManagerFactory("org.danekja.edu.pia").createEntityManager();
         userDao = new UserDaoJpa(em);
-        postDao = new PostDaoJpa(em);
         notificationDao = new NotificationDaoJpa(em);
+        postDao = new PostDaoJpa(em, userDao, notificationDao);
         pictureDao = new PictureDaoJpa(em);
         friendRequestDao = new FriendRequestDaoJpa(em);
-        commentDao = new CommentDaoJpa(em);
+        commentDao = new CommentDaoJpa(em, notificationDao, postDao, userDao);
         encoder = new PasswordHashEncoder();
         userManager = new DefaultUserManager(userDao, encoder);
         postManager = new DefaultPostManager(postDao);
+        commentManager = new DefaultCommentManager(commentDao);
         authenticationService = new AuthenticationService(userManager);
-        //createPost = new CreatePost(userManager, postManager);
+        //createPost = new CreatePost(postManager);
+        
     }
 
 	public void destroy() {
@@ -118,8 +123,11 @@ public class ApplicationContext {
     /*public CreatePost getCreatePost(){
     	return createPost;
     }*/
-
 	public PostManager getPostManager() {
 		return postManager;
+	}
+	
+	public CommentManager getCommentManager() {
+		return commentManager;
 	}
 }

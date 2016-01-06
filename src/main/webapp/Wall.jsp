@@ -8,7 +8,7 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="./bootstrap-3.3.5-dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="./bootstrap-3.3.5-dist/css/status-style.css" />
-    <title></title>
+    <title>User Wall</title>
 </head>
 <body>
 
@@ -22,12 +22,17 @@
 		<jsp:include page="headerLogged.jsp"/>
     </c:when>
     <c:otherwise>
-    	<jsp:include page="headerLogged.jsp"/>
+    	<jsp:include page="header.jsp"/>
     </c:otherwise>
 </c:choose>
+<!-- <p>Session atributes</p>
 <c:forEach items="${sessionScope}" var="attr">
     ${attr.key}=${attr.value}<br>
 </c:forEach>
+<p>Request atributes</p>
+<c:forEach items="${requestScope}" var="attr">
+    ${attr.key}=${attr.value}<br>
+</c:forEach> -->
  <!-- zacatek obsahu -->
     <div class="container">
     	<div class="row">
@@ -41,51 +46,36 @@
         	 </div>
              <!-- status window -->
           <div class="col-sm-5 col-md-6">
-                 <form action="create_post" method="post" role="form" enctype="multipart/form-data" class="facebook-share-box">
-                    <ul class="post-types">
-                        <li class="post-type">
-                            <a class="status" title="" href="#"><i class="icon icon-file"></i> Stav </a>
-                        </li>
-                        <li class="post-type">
-                            <a class="photos" href="#"><i class="icon icon-camera"></i>Přidat fotky</a>
-                        </li>
-                    </ul>
-                    <div class="share">
-                        <div class="arrow"></div>
-                        <div class="panel panel-default">
-                              <div class="panel-heading"><i class="fa fa-file"></i> Stav</div>
-                              <div class="panel-body">
-                                <div class="">
-                                	<textarea name="message" cols="1" rows="10" id="status_title" class="form-control message" style="height: 62px; overflow: hidden;" placeholder="Titul"></textarea>
-                                    <textarea name="message" cols="40" rows="10" id="status_message" class="form-control message" style="height: 62px; overflow: hidden;" placeholder="Co se vám honí hlavou ?"></textarea> 
-                                </div>
-                              </div>
-                                <div class="panel-footer">
-                                        <div class="row">
-                                            <div class="col-md-5">
-                                                <div class="form-group">
-                                                    <div class="btn-group">
-                                                      <button type="button" class="btn btn-default"><i class="icon icon-map-marker"></i> Lokace</button>
-                                                      <button type="button" class="btn btn-default"><i class="icon icon-picture"></i> Foto</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-7">
-                                                <div class="form-group">
-                                                    <select name="privacy" class="form-control privacy-dropdown pull-left input-sm">
-                                                        <option value="1" selected="selected">Veřejný</option>
-                                                        <option value="2">Já a mí přátelé</option>
-                                                        <option value="3">Jen já</option>
-                                                    </select>  
-                                                    <input type="hidden" name="ownerId" value="<%= request.getParameter("ownerId") %>">                                  
-                                                    <input type="submit" name="submit" value="Přidat příspěvek" class="btn btn-primary">                               
-                                                </div>
-                                            </div>
-                                        </div>
-                                </div>
-                            </div>
-                    </div>
-                </form>
+          	<c:if test="${param.FriendError eq 'noFriend'}">
+			    <p>
+			        Adding post not permitted!
+			    </p>
+			</c:if>  
+          	<a href="wall?ownerId=${wallOwnerId}">Chronological</a> |
+   			<a href="wall?ownerId=${wallOwnerId}&filter=popular">Popular</a>
+            <jsp:include page="addPost.jsp"/>
+		        <c:forEach var="post" items="${posts}">
+		        	<div class = "facebook-comment-box">
+	                    <div>
+	                    	<img src="./ref-material-prototype/img/${post.poster.picture}" alt="./ref-material-prototype/img/person.gif" style="width:75px;height:75px;">
+	                        <a href="wall?ownerId=${post.poster.id}">${post.poster.fName} ${post.poster.lName}</a>
+	                    </div>
+	                    <h3> ${post.title}</h3>
+	                    <div class = "facebook-comment-status">
+	                    	<p>${post.text}</p>
+	                    </div>
+	                    <div>
+	                    	<p> ${post.formattedDate} | <a href"">Like</a> ${post.popularity} Liked</p>
+	                    	<p><i><a href="comments?postId=${post.id}">View/Add Comments</a></i></p>
+	                    </div>
+                	</div>
+                		                    	<c:if test="${requestScope.commentActive eq post.id}">
+							    <p>
+							        <jsp:include page="comment.jsp?postId=${post.id}&comments=${requestScope.comments}"/>
+							    </p>
+							</c:if>
+		        </c:forEach>
+    
 			</div>>
 				<!-- right column -->
                 <div class="col-sm-3 col-md-3 right-menu">

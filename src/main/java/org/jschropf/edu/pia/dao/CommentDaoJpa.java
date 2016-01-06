@@ -1,20 +1,69 @@
 package org.jschropf.edu.pia.dao;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.ejb.EJB;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.jschropf.edu.pia.domain.Comment;
+import org.jschropf.edu.pia.domain.Post;
+import org.jschropf.edu.pia.domain.User;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class CommentDaoJpa extends GenericDaoJpa<Comment> implements CommentDao{
-	public CommentDaoJpa(EntityManager em) {
+
+    @EJB
+    private NotificationDao notificationDao;
+    
+    @EJB
+    private PostDao postDao;
+    
+    @EJB
+    private UserDao UserDao;
+	
+	public CommentDaoJpa(EntityManager em, NotificationDao notificationDao, PostDao postDao, UserDao userDao) {
         super(em, Comment.class);
+        this.notificationDao = notificationDao;
+        this.postDao = postDao;
+        this.UserDao = userDao;
     }
 
-	private UserDao userDao;
+    
+    @Override
+    public Comment createComment(String text, Long personId, Long postId) {
+        Comment comment = new Comment();
+        comment.setDate(new Date());
+        //comment.setPersonId(personId);
+        comment.setCommenter(UserDao.findById(personId));
+        comment.setPostId(postId);
+        comment.setText(text);
+        //em.persist(comment);
+        
+        //dropping to native query so the database takes care of race conditions; parameter is safe to pass;
+        Post post = postDao.findByPostId(postId);
+        startTransaction();
+        try{
+	        Query q = em.createNativeQuery("UPDATE jschropf_SM_posts SET popularity = (popularity + 1) WHERE id=" + post.getId() + ";");
+	        q.executeUpdate();
+	    } catch (Exception e) {
+	        rollbackTransaction();
+	    }
+	    commitTransaction();
+        
+        Long ownerId = post.getOwnerId();
+        Long posterId = post.getPoster().getId();
+        User commenter = UserDao.findById(personId);
+        if(ownerId != personId)
+            notificationDao.createNotification(commenter.getfName() + " " + commenter.getlName() + " commented on the post on your wall.", "wall", ownerId);
+        if(posterId != personId)
+            notificationDao.createNotification(commenter.getfName() + " " + commenter.getlName() + " commented on the post you have written.", "wall?ownerId=" + ownerId.toString(), posterId);
+        return comment;
+    }
 	
     @Override
     public Comment findByCommentId(long id) {
@@ -27,5 +76,12 @@ public class CommentDaoJpa extends GenericDaoJpa<Comment> implements CommentDao{
             //see javadoc of the findByUsername method.
             return null;
         }
+    } 
+    
+    @Override
+    public List<Comment> commentsFor(Long postId) {
+        Query q = em.createQuery("SELECT c FROM Comment c JOIN FETCH c.commenter WHERE c.postId=:postId ORDER BY c.id DESC");
+        q.setParameter("postId", postId);
+        return q.getResultList();
     } 
 }

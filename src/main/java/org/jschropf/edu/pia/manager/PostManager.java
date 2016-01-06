@@ -9,5 +9,5 @@ public interface PostManager {
 	 * Method for releasing new post on the wall.
 	 * @param post	post to be released
 	 */
-	void releasePost (Post newPost) throws PostValidationException; 
+	void releasePost (Post newPost, Long posterId) throws PostValidationException; 
 }
