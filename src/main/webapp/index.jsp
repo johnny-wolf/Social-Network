@@ -29,7 +29,7 @@
                 <div>
                     <div class="form-group">
                         <label for="username">*Uživatelské jméno:</label>
-                        <input class="form-control" type="text" id="username" name="username"/>
+                        <input class="form-control" type="text" id="username" name="username" value="${requestScope.username}"/>
                     </div>
                     <div class="form-group">
                         <label for="pass">*Heslo:</label>
@@ -41,15 +41,15 @@
                     </div>
 					<div class="form-group">
                         <label for="username">Jméno:</label>
-                        <input class="form-control" type="text" id="fname" name="fname"/>
+                        <input class="form-control" type="text" id="fname" name="fname" value="${requestScope.fname}"/>
                     </div>
                     <div class="form-group">
                         <label for="username">Příjmení:</label>
-                        <input class="form-control" type="text" id="lname" name="lname"/>
+                        <input class="form-control" type="text" id="lname" name="lname" value="${requestScope.lname}" />
                     </div>
                     <div class="form-group">
                         <label for="birthdate">Datum narození:</label>
-                        <input class="form-control" type="date" id="birthdate" name="birthdate" placeholder="dd/MM/yyyy"/>
+						<input class="form-control" type="date" id="birthdate" name="birthdate" placeholder="dd/MM/yyyy" value="${requestScope.birthdate}"/>  
                     </div>
                     <%--<div class="form-group">
                         <label for="email">E-mail:</label>

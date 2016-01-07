@@ -61,14 +61,13 @@ public class CreatePost extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	
+        ServletContext ctx = getServletConfig().getServletContext();
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8"); 
         HttpSession session = request.getSession(true);
         String username = (String)session.getAttribute("user");
         //System.out.println("searching for user: "+username);
-        Long personId = (Long)session.getAttribute("userId");
-        ServletContext ctx = getServletConfig().getServletContext();
-        
+        Long personId = (Long)session.getAttribute("userId");        
         
         PrintWriter out = response.getWriter();
        
@@ -84,9 +83,9 @@ public class CreatePost extends HttpServlet {
                 for (FileItem i : items) {
 					System.out.println(i.toString());
 				}
-                String title = items.get(0).getString();
+                String title = items.get(0).getString("UTF-8");
                 System.out.println("Loaded title: "+title);
-                String text = items.get(1).getString();
+                String text = items.get(1).getString("UTF-8");
                 System.out.println("Loaded text: "+text);
                 
                 /*System.out.println("Loading Picture");
@@ -104,11 +103,11 @@ public class CreatePost extends HttpServlet {
 	
                 //String link = items.get(4).getString();
                 
-                System.out.println("Loading poster Id: "+items.get(3).getString());
+                System.out.println("Loading poster Id: "+items.get(3).getString("UTF-8"));
                 Long ownerId = (Long)request.getAttribute("ownerId");
-                if (items.get(3).getString() != null && !items.get(3).getString().equals("null")) {
+                if (items.get(3).getString() != null && !items.get(3).getString("UTF-8").equals("null")) {
                 	System.out.println("Parsing id to long");
-                    ownerId = Long.parseLong(items.get(3).getString());
+                    ownerId = Long.parseLong(items.get(3).getString("UTF-8"));
                 } else{
                 	System.out.println("Poster is owner of the wall");
                     ownerId = personId;

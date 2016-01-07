@@ -53,7 +53,9 @@ public class Register extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = req.getParameter(USERNAME_PARAMETER);
+    	resp.setContentType("text/html;charset=UTF-8");
+    	req.setCharacterEncoding("UTF-8"); 
+    	String username = req.getParameter(USERNAME_PARAMETER);
         String password = req.getParameter(PASSWORD_PARAMETER);
         String confirmPwd = req.getParameter(CONFIRM_PWD_PARAMETER);
         String fname = req.getParameter(FIRSTNAME_PARAMETER);
@@ -92,6 +94,10 @@ public class Register extends HttpServlet {
 
     private void errorDispatch(String err, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute(ERROR_ATTRIBUTE, err);
+        req.setAttribute(USERNAME_PARAMETER, req.getParameter(USERNAME_PARAMETER));
+        req.setAttribute(FIRSTNAME_PARAMETER, req.getParameter(FIRSTNAME_PARAMETER));
+        req.setAttribute(LASTNAME_PARAMETER, req.getParameter(LASTNAME_PARAMETER));
+        req.setAttribute(BIRTH_DATE_PARAMETER, req.getParameter(BIRTH_DATE_PARAMETER));
         req.getRequestDispatcher("index.jsp").forward(req, resp);
     }
     

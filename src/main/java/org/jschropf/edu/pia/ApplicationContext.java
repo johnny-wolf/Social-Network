@@ -15,10 +15,12 @@ import org.jschropf.edu.pia.dao.PostDao;
 import org.jschropf.edu.pia.dao.PostDaoJpa;
 import org.jschropf.edu.pia.dao.UserDao;
 import org.jschropf.edu.pia.dao.UserDaoJpa;
+import org.jschropf.edu.pia.domain.DefaultFriendRequestManager;
 import org.jschropf.edu.pia.manager.CommentManager;
 import org.jschropf.edu.pia.manager.DefaultCommentManager;
 import org.jschropf.edu.pia.manager.DefaultPostManager;
 import org.jschropf.edu.pia.manager.DefaultUserManager;
+import org.jschropf.edu.pia.manager.FriendRequestManager;
 import org.jschropf.edu.pia.manager.PostManager;
 import org.jschropf.edu.pia.manager.UserManager;
 import org.jschropf.edu.pia.utils.Encoder;
@@ -52,11 +54,11 @@ public class ApplicationContext {
     private UserManager userManager;
     private PostManager postManager;
     private CommentManager commentManager;
+    private FriendRequestManager friendRequestManager;
     private Encoder encoder;
 
     //web
     private AuthenticationService authenticationService;
-    private CreatePost createPost;
 
     public ApplicationContext() {
         //TODO persistence unit name should be taken from a property file, not hard-coded!
@@ -71,6 +73,7 @@ public class ApplicationContext {
         userManager = new DefaultUserManager(userDao, encoder);
         postManager = new DefaultPostManager(postDao);
         commentManager = new DefaultCommentManager(commentDao);
+        friendRequestManager = new DefaultFriendRequestManager(friendRequestDao);
         authenticationService = new AuthenticationService(userManager);
         //createPost = new CreatePost(postManager);
         
@@ -129,5 +132,9 @@ public class ApplicationContext {
 	
 	public CommentManager getCommentManager() {
 		return commentManager;
+	}
+	
+	public FriendRequestManager getFriendRequestManager() {
+		return friendRequestManager;
 	}
 }

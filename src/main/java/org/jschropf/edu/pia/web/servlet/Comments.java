@@ -34,11 +34,12 @@ public class Comments extends HttpServlet{
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         ServletContext ctx = getServletConfig().getServletContext();
+    	response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8"); 
         HttpSession session = request.getSession(true);
         Long personId = (Long)session.getAttribute("personId");
-        Long ownerId = (Long)session.getAttribute("ownerId");
+        Long ownerId = (Long)Long.parseLong(request.getParameter("wallOwnerId"));
 //        if(personId == null) {
 //            response.sendRedirect("login");
 //            return;
@@ -48,6 +49,7 @@ public class Comments extends HttpServlet{
         List<Comment> comments = commentDao.commentsFor(postId);
         request.setAttribute("comments", comments);
         request.setAttribute("commentActive", postId);
+        request.setAttribute("wallOwnerId", ownerId);
         System.out.println("Redirecting back to wall of: "+ownerId);
         ctx.getRequestDispatcher("/wall?ownerId="+ownerId).forward(request, response);
         

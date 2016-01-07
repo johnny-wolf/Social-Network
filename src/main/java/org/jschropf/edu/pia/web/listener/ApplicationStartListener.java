@@ -5,9 +5,11 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import org.jschropf.edu.pia.ApplicationContext;
+import org.jschropf.edu.pia.domain.FriendRequest;
 import org.jschropf.edu.pia.web.filter.AuthenticationGuard;
 import org.jschropf.edu.pia.web.servlet.Comments;
 import org.jschropf.edu.pia.web.servlet.CreateComment;
+import org.jschropf.edu.pia.web.servlet.CreateFriendRequest;
 import org.jschropf.edu.pia.web.servlet.CreatePost;
 import org.jschropf.edu.pia.web.servlet.Login;
 import org.jschropf.edu.pia.web.servlet.Register;
@@ -38,6 +40,7 @@ public class ApplicationStartListener implements ServletContextListener {
         sce.getServletContext().addServlet("wall", new Wall(ctx.getPostDao())).addMapping("/wall");
         sce.getServletContext().addServlet("createComment", new CreateComment(ctx.getCommentDao(), ctx.getCommentManager())).addMapping("/createComment");
         sce.getServletContext().addServlet("comments", new Comments(ctx.getCommentDao())).addMapping("/comments");
+        sce.getServletContext().addServlet("friendRequest", new CreateFriendRequest(ctx.getFriendRequestDao(), ctx.getFriendRequestManager())).addMapping("/friendRequest");
         
         sce.getServletContext().addFilter("authFilter", new AuthenticationGuard(ctx.getAuthenticationService())).addMappingForUrlPatterns(null, false, "/secret/*");
     }

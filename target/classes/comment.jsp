@@ -7,16 +7,19 @@
     </head>
     <body>
 	<% if (session.getAttribute("userId") != null) { %>
-		<h2>Add comment</h2>
 		<div class = "facebook-comment-box-reply">
+		<h2>Add comment</h2>
         <form action="createComment" method="post">
             <input type="hidden" name="postId" value="<%=request.getParameter("postId")%>" />
+            <input type="hidden" name="wallOwnerId" value="<%=request.getParameter("wallOwnerId")%>" />
             <textarea name="text" rows="5" cols="25"></textarea><br />
             <input type="submit" value="Submit">
         </form>
         </div>
 	<% } %>
-        <h2>Existing Comments:</h2>
+		<div class = "facebook-comment-box-reply">
+        	<h2>Existing Comments:</h2>
+        </div>
          <c:forEach var="comment" items="${comments}">
          	<div class = "facebook-comment-box-reply">
                     <div>
@@ -27,26 +30,10 @@
                     	<p>${comment.text}</p>
                     </div>
                     <div>
-                    	<a href"">To se mi líbí</a> <a>Sdílet</a>
+                    	<a href""> To se mi líbí</a>
                     </div>
                     <hr />
         	</div>
         </c:forEach>
-        <!--<table cellspacing="2" cellpadding="0" border="0">
-            <tbody>
-                <c:forEach var="comment" items="${comments}">
-                    <tr>
-                        <td>
-                            <img src="./ref-material-prototype/img/${comment.commenter.picture}" height="100"/><br />
-                            <i>${comment.commenter.fName} ${comment.commenter.lName}</i>
-                        </td>
-                        <td>
-                            <p style="font-size:0.9em;">${comment.text}</p>
-                            <br /><br />
-                        </td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table> -->
     </body>
 </html>

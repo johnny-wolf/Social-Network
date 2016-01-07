@@ -35,9 +35,10 @@ public class Wall extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession(true);
         ServletContext ctx = getServletConfig().getServletContext();
+    	response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8"); 
+        HttpSession session = request.getSession(true);
         Long personId = (Long)session.getAttribute("personId");
         Long commentLoaded = (Long)request.getAttribute("commentLoaded");
         List<Comment> comments = (List<Comment>) request.getAttribute("comments");

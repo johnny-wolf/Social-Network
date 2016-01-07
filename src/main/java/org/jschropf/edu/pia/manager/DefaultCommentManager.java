@@ -35,5 +35,6 @@ public class DefaultCommentManager implements CommentManager{
         	commentDao.rollbackTransaction();
         }
         commentDao.commitTransaction();
+        System.out.println("Comment Transaction Complete");
 	}
 }

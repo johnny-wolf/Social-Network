@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=charset=UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
@@ -21,10 +21,10 @@
             </div>
             <div class="collapse navbar-collapse" id="mynavigation">
                 <ul class="nav navbar-nav navbar-right">
-                	<li class="active"><a href="#profile">Nové příspěvky</a></li>
-                    <li><a href="#profile">Žádosti přátelství</a></li>
-                    <li><a href="#help">Pomoc</a></li>
-                    <li><a href="#logout">Odhlášení</a></li>
+                	<li class="active"><a href="#profile">News Feed</a></li>
+                    <li><a href="#profile">Friend Requests</a></li>
+                    <li><a href="#help">Notifications</a></li>
+                    <li><a href="#logout">Log out</a></li>
                 </ul>
             </div>
         </div>

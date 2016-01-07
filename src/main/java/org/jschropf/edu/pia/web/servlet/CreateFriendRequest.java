@@ -3,7 +3,6 @@ package org.jschropf.edu.pia.web.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,23 +10,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.jschropf.edu.pia.dao.CommentDao;
-import org.jschropf.edu.pia.domain.Comment;
-import org.jschropf.edu.pia.domain.CommentValidationException;
-import org.jschropf.edu.pia.domain.PostValidationException;
-import org.jschropf.edu.pia.manager.CommentManager; 
+import org.jschropf.edu.pia.dao.FriendRequestDao;
+import org.jschropf.edu.pia.domain.FriendRequest;
+import org.jschropf.edu.pia.manager.FriendRequestManager;
 
-public class CreateComment extends HttpServlet{
+public class CreateFriendRequest extends HttpServlet{
 	@EJB
-    private CommentDao commentDao;
+    private FriendRequestDao friendRequestDao;
 	
 	@EJB
-	private CommentManager commentManager;
-
-	public CreateComment(CommentDao commentDao, CommentManager commentManager){
-		this.commentDao = commentDao;
-		this.commentManager = commentManager;
+	private FriendRequestManager friendRequestManager;
+	
+	public CreateFriendRequest(FriendRequestDao friendRequestDao, FriendRequestManager friendRequestManager){
+		this.friendRequestDao = friendRequestDao;
+		this.friendRequestManager = friendRequestManager;
 	}
+
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -37,45 +35,40 @@ public class CreateComment extends HttpServlet{
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ServletContext ctx = getServletConfig().getServletContext();
-    	response.setContentType("text/html;charset=UTF-8");
+    	System.out.println("Requesting friendship - Starting");
+        response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8"); 
         HttpSession session = request.getSession(true);
         Long personId = (Long)session.getAttribute("userId");
-        if(personId == null) {
-            response.sendRedirect("login");
-            return;
-        }
         PrintWriter out = response.getWriter();
         try {
-            String text = request.getParameter("text");
-            Long postId = Long.parseLong(request.getParameter("postId"));
-            Long ownerId = Long.parseLong(request.getParameter("wallOwnerId"));
-            Comment temp = commentDao.createComment(text, personId, postId);
-            try {
-				commentManager.releaseComment(temp, personId);
-			} catch (CommentValidationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-            
-                response.sendRedirect("comments?postId=" + postId + "&wallOwnerId=" + ownerId);
-            /* TODO output your page here
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CreateCommentServlet</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CreateCommentServlet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-             */
-        } finally {            
+        	if(personId == null){
+        		request.setAttribute("err", "To add friend, you must be logged in!");
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
+        	}
+        	System.out.println("retrieving target id: " + request.getParameter("targetId"));
+            Long targetId = Long.parseLong(request.getParameter("targetId")); 
+            if(personId != targetId){
+            	FriendRequest temp = friendRequestDao.createFriendRequest(personId, targetId);
+            	if (temp != null)
+            		friendRequestManager.releaseFriendRequest(temp);
+                out.println("friend requested");
+                System.out.println("Requesting friendship - Done");
+                response.sendRedirect("/wall?ownerId=" + targetId);
+            }else {
+                out.println("friend request failed. you already requested this person or you do not have rights to request this person.");
+                request.setAttribute("err", "friend request failed. you already requested this person or you do not have rights to request this person.");
+                response.sendRedirect("/wall?ownerId=" + targetId);
+            }
+        }catch(Exception e){ 
+        	System.out.println("Exception " + e);
+        }
+        
+        finally {            
             out.close();
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
      * Handles the HTTP <code>GET</code> method.
      * @param request servlet request
@@ -109,6 +102,5 @@ public class CreateComment extends HttpServlet{
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-} 
-
+    }
+}

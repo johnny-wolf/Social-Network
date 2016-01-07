@@ -9,6 +9,7 @@ F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\domain\Post.java
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\utils\PasswordHash.java
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\web\servlet\Wall.java
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\dao\NotificationDao.java
+F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\domain\FriendRequestValidationException.java
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\manager\PostManager.java
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\web\filter\AuthenticationGuard.java
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\dao\PostDao.java
@@ -23,7 +24,10 @@ F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\domain\Notificat
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\dao\GenericDao.java
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\manager\CommentManager.java
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\web\servlet\Comments.java
+F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\manager\FriendRequestManager.java
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\dao\CommentDao.java
+F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\web\servlet\CreateFriendRequest.java
+F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\domain\DefaultFriendRequestManager.java
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\dao\PictureDaoJpa.java
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\domain\UserValidationException.java
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\ApplicationContext.java

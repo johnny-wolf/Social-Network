@@ -40,19 +40,26 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     	HttpSession session = req.getSession(true);
+    	resp.setContentType("text/html;charset=UTF-8");
+    	req.setCharacterEncoding("UTF-8"); 
         String username = req.getParameter(USERNAME_PARAMETER);
         String password = req.getParameter(PASSWORD_PARAMETER);
-
-        boolean authenticated = authService.authenticate(req.getSession(), username, password);
-        if(authenticated) {
-        	User temp = (User)em.createNamedQuery("User.findByUserName", User.class).setParameter("username", username).getSingleResult();
-        	Long ownerId = temp.getId();
-        	System.out.println("Login user: "+username+" id: "+ownerId);
-        	session.setAttribute("userId",ownerId );
-            resp.sendRedirect("/wall?ownerId="+ownerId);
-        } else {
-            req.setAttribute(ERR_ATTRIBUTE, "Invalid credentials!");
-            req.getRequestDispatcher("/register").forward(req, resp);
+        System.out.println("Validating username: "+ username + "and password: " + password);
+        if(username.isEmpty() || password.isEmpty()){
+        	req.setAttribute(ERR_ATTRIBUTE, "Invalid credentials!");
+            req.getRequestDispatcher("/index.jsp").forward(req, resp);
+        }else{
+	        boolean authenticated = authService.authenticate(req.getSession(), username, password);
+	        if(authenticated) {
+	        	User temp = (User)em.createNamedQuery("User.findByUserName", User.class).setParameter("username", username).getSingleResult();
+	        	Long ownerId = temp.getId();
+	        	System.out.println("Login user: "+username+" id: "+ownerId);
+	        	session.setAttribute("userId",ownerId );
+	            resp.sendRedirect("/wall?ownerId="+ownerId);
+	        } else {
+	            req.setAttribute(ERR_ATTRIBUTE, "Invalid credentials!");
+	            req.getRequestDispatcher("/register").forward(req, resp);
+	        }
         }
     }
     

@@ -4,7 +4,7 @@ import org.jschropf.edu.pia.domain.FriendRequest;
 
 public interface FriendRequestDao extends GenericDao<FriendRequest>{
 
-	public boolean createFriendRequest(long sourceId, long targetId);
+	public FriendRequest createFriendRequest(long sourceId, long targetId);
 
     public boolean acceptFriendRequest(long sourceId, long targetId);
 

@@ -17,13 +17,13 @@ public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements
         super(em, FriendRequest.class);
     }
 	
-    public boolean createFriendRequest(long sourceId, long targetId){
+    public FriendRequest createFriendRequest(long sourceId, long targetId){
         //if already requested
         Query q = em.createQuery("SELECT COUNT(f) FROM FriendRequest f WHERE f.sourceId=:sourceId AND f.targetId=:targetId AND f.status <> 'DECLINED'");
         q.setParameter("sourceId", sourceId);
         q.setParameter("targetId", targetId);
         if ((Long) q.getSingleResult() > 0) {
-            return false;
+            return null;
         }
         //this is not a mistake - cross requesting
         Query q2 = em.createQuery("SELECT COUNT(f) FROM FriendRequest f WHERE f.sourceId=:sourceId AND f.targetId=:targetId AND f.status <> 'DECLINED'");
@@ -34,7 +34,7 @@ public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements
             q3.setParameter("sourceId", targetId);
             q3.setParameter("targetId", sourceId);
             q3.executeUpdate();
-            return true;
+            return null;
         }
         FriendRequest friendRequest = new FriendRequest();
         friendRequest.setDate(new Date());
@@ -43,7 +43,7 @@ public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements
         friendRequest.setTargetId(targetId);
         friendRequest.setStatus("UNANSWERED");
         em.persist(friendRequest);
-        return true;
+        return friendRequest;
     }
     
     public boolean acceptFriendRequest(long sourceId, long targetId) {
