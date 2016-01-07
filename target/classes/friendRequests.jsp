@@ -36,48 +36,41 @@
     <div class="container">
     	<div class="row">
         	 <!-- Left bar -->
-             <jsp:include page ="profileColumn.jsp?ownerId=${wallOwnerId}"/>
-             <!-- status window -->
-          
-          <div class="col-sm-5 col-md-6">
-          <h2>Posts</h2>
-          	<c:if test="${param.FriendError eq 'noFriend'}">
-			    <p>
-			        Adding post not permitted!
-			    </p>
-			</c:if>  
-          	<a href="wall?ownerId=${wallOwnerId}">Chronological</a> |
-   			<a href="wall?ownerId=${wallOwnerId}&filter=popular">Popular</a>
-            <jsp:include page="addPost.jsp"/>
-		        <c:forEach var="post" items="${posts}">
-		        	<div class = "facebook-comment-box">
-	                    <div>
-	                    	<img src="./ref-material-prototype/img/${post.poster.picture}" alt="./ref-material-prototype/img/person.gif" style="width:75px;height:75px;">
-	                        <a href="wall?ownerId=${post.poster.id}">${post.poster.fName} ${post.poster.lName}</a>
-	                    </div>
-	                    <h3> ${post.title}</h3>
-	                    <div class = "facebook-comment-status">
-	                    	<p>${post.text}</p>
-	                    </div>
-	                    <div>
-	                    	<p> ${post.formattedDate} | <a href"">Like</a> ${post.popularity} Liked</p>
-	                    	<p><i><a href="comments?postId=${post.id}&wallOwnerId=${wallOwnerId}">View/Add Comments</a></i></p>
-	                    </div>
-                	</div>
-                		                    	<c:if test="${requestScope.commentActive eq post.id}">
-							    <p>
-							        <jsp:include page="comment.jsp?postId=${post.id}&comments=${requestScope.comments}"/>
-							    </p>
-							</c:if>
-		        </c:forEach>
-    
+             <jsp:include page ="profileColumn.jsp"/>
+             <!-- friend requests -->
+             <div class="col-sm-5 col-md-6">
+          <h2>Friend Requests</h2>
+          <c:forEach var="requester" items="${friendRequests}">
+		      <a href="profile?personId=${requester.id}">${requester.fName} ${requester.lName}</a><br />
+		      <a href="profile?personId=${requester.id}"><img src="./ref-material-prototype/img/${requester.picture}" height="100"/></a>
+		      <table>
+		        <tbody>
+		          <tr>
+		            <td>
+			      <form action="acceptFriendRequest">
+		                <input type="hidden" name="sourceId" value="${requester.id}" />
+		                <input type="submit" value="Confirm" />
+			      </form>
+			    </td>
+		            <td>
+			      <form action="declineFriendRequest">
+		                <input type="hidden" name="sourceId" value="${requester.id}" />
+			        <input type="submit" value="Ignore" />
+			      </form>
+			    </td>
+		          </tr>
+		        </tbody>
+		      </table>
+		    </c:forEach>
+		    </div>
+		    <div>
+			<!-- right column -->
+            <jsp:include page ="friendColumn.jsp"/>
 			</div>
-			<div>
-				<!-- right column -->
-                <jsp:include page ="/friendColumn.jsp?people=${requestScope.friends}"/>
-                </div>
 		</div>
 	</div>
+			
+		
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <!-- Latest compiled and minified JavaScript -->

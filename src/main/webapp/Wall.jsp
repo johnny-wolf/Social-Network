@@ -36,10 +36,11 @@
     <div class="container">
     	<div class="row">
         	 <!-- Left bar -->
-             <jsp:include page ="profileColumn.jsp"/>
+             <jsp:include page ="profileColumn.jsp?ownerId=${wallOwnerId}"/>
              <!-- status window -->
-          <h2>Posts</h2>
+          
           <div class="col-sm-5 col-md-6">
+          <h2>Posts</h2>
           	<c:if test="${param.FriendError eq 'noFriend'}">
 			    <p>
 			        Adding post not permitted!
@@ -70,9 +71,11 @@
 							</c:if>
 		        </c:forEach>
     
-			</div>>
+			</div>
+			<div>
 				<!-- right column -->
-                <jsp:include page ="friendColumn.jsp"/>
+                <jsp:include page ="/friendColumn.jsp?people=${requestScope.friends}"/>
+                </div>
 		</div>
 	</div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

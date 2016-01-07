@@ -1,9 +1,11 @@
 package org.jschropf.edu.pia.dao;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.jschropf.edu.pia.domain.User;
@@ -49,4 +51,41 @@ public class UserDaoJpa extends GenericDaoJpa<User> implements UserDao, Serializ
             return null;
         }
     }
+    
+    @Override
+    public List<User> unansweredFriendRequestsFor(Long personId) {
+        Query q = em.createQuery("SELECT u FROM User u WHERE EXISTS (SELECT f FROM FriendRequest f WHERE f.targetId=:targetId AND f.status='UNANSWERED' AND u.id=f.sourceId)");
+        q.setParameter("targetId", personId);
+        return q.getResultList();
+      } 
+    
+    @Override
+    public List<User> friendsFor(Long personId) {
+        Query q = em.createQuery("SELECT u FROM User u WHERE EXISTS (SELECT f FROM FriendRequest f WHERE ((f.sourceId=:personId AND f.targetId=u.id) OR (f.sourceId=u.id AND f.targetId=:personId)) AND f.status='ACCEPTED')");
+        q.setParameter("personId", personId);
+        return q.getResultList();
+    }
+    
+    @Override
+    public List<User> friendsSortedByName(Long personId, boolean isAscending) {
+	String order = isAscending ? "ASC" : "DESC";
+        Query q = em.createQuery("SELECT u FROM User u WHERE EXISTS (SELECT f FROM FriendRequest f WHERE ((f.sourceId=:personId AND f.targetId=u.id) OR (f.sourceId=u.id AND f.targetId=:personId)) AND f.status='ACCEPTED') ORDER BY u.fName " + order + ", u.lName " + order );
+        q.setParameter("personId", personId);
+        return q.getResultList();
+    }
+    
+    @Override
+    public List<User> friendsSortedByDateOfBirth(Long personId, boolean isAscending) {
+	String order = isAscending ? "ASC" : "DESC";
+        Query q = em.createQuery("SELECT u FROM User u WHERE EXISTS (SELECT f FROM FriendRequest f WHERE ((f.sourceId=:personId AND f.targetId=u.id) OR (f.sourceId=u.id AND f.targetId=:personId)) AND f.status='ACCEPTED') ORDER BY u.dateOfBirth " + order);
+        q.setParameter("personId", personId);
+        return q.getResultList();
+    } 
+    
+    @Override
+    public List<User> nonFriendsFor(Long personId) {
+        Query q = em.createQuery("SELECT u FROM User u WHERE u.id<>:personId AND NOT EXISTS (SELECT f FROM FriendRequest f WHERE ((f.sourceId=:personId AND f.targetId=u.id) OR (f.sourceId=u.id AND f.targetId=:personId)) AND f.status='ACCEPTED')");
+        q.setParameter("personId", personId);
+        return q.getResultList();
+    } 
 }

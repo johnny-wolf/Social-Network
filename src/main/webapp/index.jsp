@@ -11,7 +11,7 @@
 </head>
 <body>
 <c:if test="${not empty sessionScope.user}">
-	<c:redirect url="/Wall.jsp" />
+	<c:redirect url="/wall?ownerId=${userId}" />
 </c:if>
 <jsp:include page="header.jsp"/>
 <c:if test="${not empty requestScope.err}">

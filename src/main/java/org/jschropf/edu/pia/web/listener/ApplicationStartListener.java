@@ -7,10 +7,13 @@ import javax.servlet.annotation.WebListener;
 import org.jschropf.edu.pia.ApplicationContext;
 import org.jschropf.edu.pia.domain.FriendRequest;
 import org.jschropf.edu.pia.web.filter.AuthenticationGuard;
+import org.jschropf.edu.pia.web.servlet.AcceptFriendRequest;
 import org.jschropf.edu.pia.web.servlet.Comments;
 import org.jschropf.edu.pia.web.servlet.CreateComment;
 import org.jschropf.edu.pia.web.servlet.CreateFriendRequest;
 import org.jschropf.edu.pia.web.servlet.CreatePost;
+import org.jschropf.edu.pia.web.servlet.FriendRequests;
+import org.jschropf.edu.pia.web.servlet.Friends;
 import org.jschropf.edu.pia.web.servlet.Login;
 import org.jschropf.edu.pia.web.servlet.Register;
 import org.jschropf.edu.pia.web.servlet.SecretServlet;
@@ -37,11 +40,14 @@ public class ApplicationStartListener implements ServletContextListener {
         sce.getServletContext().addServlet("register", new Register(ctx.getUserManager(),ctx.getEm())).addMapping("/register");
         sce.getServletContext().addServlet("secret", new SecretServlet()).addMapping("/secret/vip");
         sce.getServletContext().addServlet("createPost", new CreatePost(ctx.getPostManager(), ctx.getFriendRequestDao(), ctx.getPostDao())).addMapping("/createPost");
-        sce.getServletContext().addServlet("wall", new Wall(ctx.getPostDao())).addMapping("/wall");
+        sce.getServletContext().addServlet("wall", new Wall(ctx.getPostDao(), ctx.getUserDao())).addMapping("/wall");
         sce.getServletContext().addServlet("createComment", new CreateComment(ctx.getCommentDao(), ctx.getCommentManager())).addMapping("/createComment");
         sce.getServletContext().addServlet("comments", new Comments(ctx.getCommentDao())).addMapping("/comments");
         sce.getServletContext().addServlet("friendRequest", new CreateFriendRequest(ctx.getFriendRequestDao(), ctx.getFriendRequestManager())).addMapping("/friendRequest");
-        
+        sce.getServletContext().addServlet("friendRequests", new FriendRequests(ctx.getUserDao())).addMapping("/friendRequests");
+        sce.getServletContext().addServlet("acceptFriendRequest", new AcceptFriendRequest(ctx.getFriendRequestDao(), ctx.getFriendRequestManager())).addMapping("/acceptFriendRequest");
+        sce.getServletContext().addServlet("friends", new Friends(ctx.getUserDao())).addMapping("/friends");
+
         sce.getServletContext().addFilter("authFilter", new AuthenticationGuard(ctx.getAuthenticationService())).addMappingForUrlPatterns(null, false, "/secret/*");
     }
 

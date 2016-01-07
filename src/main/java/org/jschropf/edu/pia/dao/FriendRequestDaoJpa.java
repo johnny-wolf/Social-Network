@@ -17,7 +17,8 @@ public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements
         super(em, FriendRequest.class);
     }
 	
-    public FriendRequest createFriendRequest(long sourceId, long targetId){
+	@Override
+    public FriendRequest createFriendRequest(Long sourceId, Long targetId){
         //if already requested
         Query q = em.createQuery("SELECT COUNT(f) FROM FriendRequest f WHERE f.sourceId=:sourceId AND f.targetId=:targetId AND f.status <> 'DECLINED'");
         q.setParameter("sourceId", sourceId);
@@ -45,16 +46,19 @@ public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements
         em.persist(friendRequest);
         return friendRequest;
     }
-    
-    public boolean acceptFriendRequest(long sourceId, long targetId) {
+	
+	@Override
+    public boolean acceptFriendRequest(Long sourceId, Long targetId) {
         Query q = em.createQuery("UPDATE FriendRequest f SET f.status='ACCEPTED' WHERE f.sourceId=:sourceId AND f.targetId=:targetId");
         q.setParameter("sourceId", sourceId);
         q.setParameter("targetId", targetId);
         q.executeUpdate();
+        
         return true;
     } 
     
-    public boolean declineFriendRequest(long sourceId, long targetId) {
+	@Override
+    public boolean declineFriendRequest(Long sourceId, Long targetId) {
         Query q = em.createQuery("UPDATE FriendRequest f SET f.status='DECLINED' WHERE (f.sourceId=:sourceId AND f.targetId=:targetId) OR (f.sourceId=:targetId AND f.targetId=:sourceId)");
         q.setParameter("sourceId", sourceId);
         q.setParameter("targetId", targetId);
@@ -62,7 +66,8 @@ public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements
         return true;
     }
     
-    public boolean areFriends(long personId1, long personId2){
+	@Override
+    public boolean areFriends(Long personId1, Long personId2){
 	    if(personId1 == 0 || personId2 == 0) return false;
 	    if(personId1 == personId2) return false;
 	    Query q = em.createQuery("SELECT COUNT(r) FROM FriendRequest r WHERE r.status='ACCEPTED' AND ((r.sourceId=:personId1 AND r.targetId=:personId2) OR (r.sourceId=:personId2 AND r.targetId=:personId1))");
@@ -76,7 +81,8 @@ public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements
 	    }
     } 
     
-    public boolean areUnanswered(long personId1, long personId2){
+	@Override
+    public boolean areUnanswered(Long personId1, Long personId2){
 	    if(personId1 == 0 || personId2 == 0) return false;
 	    if(personId1 == personId2) return false;
 	    Query q = em.createQuery("SELECT COUNT(r) FROM FriendRequest r WHERE r.status='UNANSWERED' AND ((r.sourceId=:personId1 AND r.targetId=:personId2) OR (r.sourceId=:personId2 AND r.targetId=:personId1))");

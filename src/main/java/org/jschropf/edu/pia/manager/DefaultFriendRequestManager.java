@@ -1,7 +1,8 @@
-package org.jschropf.edu.pia.domain;
+package org.jschropf.edu.pia.manager;
 
 import org.jschropf.edu.pia.dao.FriendRequestDao;
-import org.jschropf.edu.pia.manager.FriendRequestManager;
+import org.jschropf.edu.pia.domain.FriendRequest;
+import org.jschropf.edu.pia.domain.FriendRequestValidationException;
 
 public class DefaultFriendRequestManager implements FriendRequestManager{
 	private FriendRequestDao friendRequestDao;
@@ -31,6 +32,21 @@ public class DefaultFriendRequestManager implements FriendRequestManager{
             //newPost.setPoster(userDao.findById(posterId));
         } catch (Exception e) {
         	friendRequestDao.rollbackTransaction();
+        }
+        friendRequestDao.commitTransaction();
+        System.out.println("Friend Request Transaction Complete");
+	}
+	
+	@Override
+	public void acceptFriendRequest(Long sourceId, Long targetId){
+		System.out.println("Starting Friend Request Transaction");
+		friendRequestDao.startTransaction();
+		try {
+        	friendRequestDao.acceptFriendRequest(sourceId, targetId);
+            //newPost.setPoster(userDao.findById(posterId));
+        } catch (Exception e) {
+        	friendRequestDao.rollbackTransaction();
+        	System.out.println(e);
         }
         friendRequestDao.commitTransaction();
         System.out.println("Friend Request Transaction Complete");

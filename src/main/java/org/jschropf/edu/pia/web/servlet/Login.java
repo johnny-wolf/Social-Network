@@ -57,8 +57,8 @@ public class Login extends HttpServlet {
 	        	session.setAttribute("userId",ownerId );
 	            resp.sendRedirect("/wall?ownerId="+ownerId);
 	        } else {
-	            req.setAttribute(ERR_ATTRIBUTE, "Invalid credentials!");
-	            req.getRequestDispatcher("/register").forward(req, resp);
+	            req.setAttribute(ERR_ATTRIBUTE, "Invalid credentials! Try loging in again or Sign up");
+	            req.getRequestDispatcher("/index.jsp").forward(req, resp);
 	        }
         }
     }

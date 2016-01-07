@@ -10,10 +10,15 @@
                              <textarea rows="1" placeholder="Hledat..."></textarea> 
                 </div>
                 <ul>
+			    <c:forEach var="person" items="${people}">
                     <li>
-                        <img src="./ref-material-prototype/img/prof2.png" alt="Mountain View" style="width:40px;height:40px;"> <a href="">Annie </a>
+                        <a href="wall?ownerId=${person.id}"><img src="./ref-material-prototype/img/${person.picture}" style="width:40px;height:40px;"/></a>
                     </li>
-                </ul>
+                    <li>
+                    	<a href="wall?ownerId=${person.id}">${person.fName} ${person.lName}</a>
+                    </li>
+			    </c:forEach>
+			    </ul>
              </div>
 	</body>
 </html>

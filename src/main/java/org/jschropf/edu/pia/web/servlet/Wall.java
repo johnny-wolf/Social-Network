@@ -13,17 +13,22 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.jschropf.edu.pia.dao.PostDao;
+import org.jschropf.edu.pia.dao.UserDao;
 import org.jschropf.edu.pia.domain.Comment;
-import org.jschropf.edu.pia.domain.Post; 
+import org.jschropf.edu.pia.domain.Post;
+import org.jschropf.edu.pia.domain.User; 
 
 //@WebServlet(name = "Wall", urlPatterns = {"/wall"}) 
 public class Wall extends HttpServlet {
 
 	@EJB
-    private PostDao postDao; 
+    private PostDao postDao;
 	
-	public Wall(PostDao postDao){
+	private UserDao userDao; 
+	
+	public Wall(PostDao postDao, UserDao userDao){
 		this.postDao = postDao;
+		this.userDao = userDao;
 	}
 	
 	 /** 
@@ -39,7 +44,7 @@ public class Wall extends HttpServlet {
     	response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8"); 
         HttpSession session = request.getSession(true);
-        Long personId = (Long)session.getAttribute("personId");
+        Long personId = (Long)session.getAttribute("userId");
         Long commentLoaded = (Long)request.getAttribute("commentLoaded");
         List<Comment> comments = (List<Comment>) request.getAttribute("comments");
         if(comments != null)
@@ -72,7 +77,20 @@ public class Wall extends HttpServlet {
     		System.out.println("Not Friend of owner " + ownerId);
     		request.setAttribute("FriendError", request.getAttribute("FriendError"));
     	}
-        
+    	
+    	List<User> friends = null;
+	    String orderParam = request.getParameter("order");
+	    boolean order = (orderParam == null || !orderParam.equals("DESC"));
+	    String orderBy = request.getParameter("orderBy");
+	    if(orderBy != null && orderBy.equals("dateOfBirth")) {
+		friends = userDao.friendsSortedByDateOfBirth(personId, order);
+	    } else {
+		friends = userDao.friendsSortedByName(personId, order);
+	    }
+	    List<User> nonFriends = userDao.nonFriendsFor(personId);
+	    
+	    request.setAttribute("people", friends);
+	    
     	ctx.getRequestDispatcher("/Wall.jsp").forward(request, response);
     }
 

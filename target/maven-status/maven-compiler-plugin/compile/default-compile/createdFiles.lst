@@ -1,10 +1,12 @@
 org\jschropf\edu\pia\domain\FriendRequestValidationException.class
+org\jschropf\edu\pia\web\servlet\Friends.class
 org\jschropf\edu\pia\manager\DefaultCommentManager.class
 org\jschropf\edu\pia\manager\PostManager.class
+org\jschropf\edu\pia\web\servlet\AcceptFriendRequest.class
 org\jschropf\edu\pia\web\servlet\Wall.class
 org\jschropf\edu\pia\web\servlet\Comments.class
-org\jschropf\edu\pia\domain\DefaultFriendRequestManager.class
 org\jschropf\edu\pia\manager\CommentManager.class
+org\jschropf\edu\pia\manager\DefaultFriendRequestManager.class
 org\jschropf\edu\pia\domain\CommentValidationException.class
 org\jschropf\edu\pia\manager\DefaultPostManager.class
 org\jschropf\edu\pia\web\servlet\CreateFriendRequest.class
@@ -12,3 +14,4 @@ org\jschropf\edu\pia\web\servlet\CreatePost.class
 org\jschropf\edu\pia\web\servlet\CreateComment.class
 org\jschropf\edu\pia\manager\FriendRequestManager.class
 org\jschropf\edu\pia\domain\PostValidationException.class
+org\jschropf\edu\pia\web\servlet\FriendRequests.class
