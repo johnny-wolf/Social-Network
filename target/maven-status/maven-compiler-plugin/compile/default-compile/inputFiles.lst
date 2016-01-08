@@ -1,6 +1,7 @@
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\web\servlet\Login.java
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\web\servlet\DeclineFriendRequest.java
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\domain\BaseObject.java
+F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\web\servlet\AllPeople.java
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\dao\CommentDaoJpa.java
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\web\servlet\Wall.java
 F:\a JAVA\PIA\Social-Network\src\main\java\org\jschropf\edu\pia\dao\NotificationDao.java

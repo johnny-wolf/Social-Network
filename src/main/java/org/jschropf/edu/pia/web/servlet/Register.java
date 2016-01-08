@@ -152,8 +152,11 @@ public class Register extends HttpServlet {
 	             }
 	            File uploadedFile = new File(filePath);
 	            System.out.println(filePath);
+	            String newName = randomString(10, fileName);
+	            uploadedFile = new File(uploadFolder + File.separator + newName);
+	            System.out.println(uploadFolder + File.separator + newName);
 	            items.get(6).write(uploadedFile);
-	            userManager.updatePicture(result, result.getUsername() + "/" + fileName);
+	            userManager.updatePicture(result, newName);
 	            
     		}
     		session.setAttribute("userId",result.getId() );
@@ -181,10 +184,22 @@ public class Register extends HttpServlet {
         return null;
     }
 
-	String randomString( int len ){
-	   StringBuilder sb = new StringBuilder( len );
+	String randomString( int len, String fileName ){
+		System.out.println("Creating random name");
+	   int j = fileName.length() - 1;
+	   String type = "";
+	   while(fileName.charAt(j) != '.'){
+		   type = fileName.charAt(j) + type;
+		   j--;
+	   }
+	   type = '.' + type;
+	   System.out.println("Type of file: " + type);
+	   //StringBuilder sb = new StringBuilder( len );
+	   String s = "";
 	   for( int i = 0; i < len; i++ ) 
-	      sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
-	   return sb.toString();
+	      //sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
+		  s+= AB.charAt(rnd.nextInt(AB.length() - 1)); 
+	   type = s + type;
+	   return type;
 	}
 }
