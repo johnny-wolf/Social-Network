@@ -12,7 +12,7 @@
                 <ul>
 			    <c:forEach var="person" items="${people}">
                     <li>
-                        <a href="wall?ownerId=${person.id}"><img src="./ref-material-prototype/img/${person.picture}" style="width:40px;height:40px;"/></a>
+                        <a href="wall?ownerId=${person.id}"><img src="ref-material-prototype/img/${person.picture}" style="width:40px;height:40px;"/></a>
                     </li>
                     <li>
                     	<a href="wall?ownerId=${person.id}">${person.fName} ${person.lName}</a>

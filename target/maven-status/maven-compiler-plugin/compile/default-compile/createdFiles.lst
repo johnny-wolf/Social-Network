@@ -3,6 +3,7 @@ org\jschropf\edu\pia\web\servlet\Friends.class
 org\jschropf\edu\pia\manager\DefaultCommentManager.class
 org\jschropf\edu\pia\manager\PostManager.class
 org\jschropf\edu\pia\web\servlet\AcceptFriendRequest.class
+org\jschropf\edu\pia\web\servlet\Logout.class
 org\jschropf\edu\pia\web\servlet\Wall.class
 org\jschropf\edu\pia\web\servlet\Comments.class
 org\jschropf\edu\pia\manager\CommentManager.class

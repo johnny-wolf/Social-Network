@@ -54,6 +54,15 @@ public class DefaultUserManager implements UserManager {
     }
     
     @Override
+    public void updatePicture(User user, String filename){
+        try {
+            userDao.updatePicture(user.getId(), filename);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    
+    @Override
     public long userIdFinder(String username){
     	User u = userDao.findByUsername(username);
     	System.out.println(u);

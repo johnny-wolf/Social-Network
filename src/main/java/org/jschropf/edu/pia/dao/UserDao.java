@@ -30,4 +30,6 @@ public interface UserDao extends GenericDao<User> {
 
 	List<User> nonFriendsFor(Long personId);
 
+	boolean updatePicture(Long personId, String filename);
+
 }

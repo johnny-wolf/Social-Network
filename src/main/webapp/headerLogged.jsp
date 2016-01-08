@@ -16,14 +16,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.jsp?ownerId=${sessionScope.userId}">ITNet</a>
+                <a class="navbar-brand" href="index.jsp">ITNet</a>
             </div>
             <div class="collapse navbar-collapse" id="mynavigation">
                 <ul class="nav navbar-nav navbar-right">
                 	<li class="active"><a href="#profile">News Feed</a></li>
                     <li><a href="/friendRequests">Friend Requests</a></li>
-                    <li><a href="#help">Notifications</a></li>
-                    <li><a href="#logout">Log out</a></li>
+                    <li><a href="/notifications">Notifications</a></li>
+                    <li><a href="/logout">Log out</a></li>
                 </ul>
             </div>
         </div>

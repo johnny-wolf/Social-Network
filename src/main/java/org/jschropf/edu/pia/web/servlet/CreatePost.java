@@ -68,8 +68,6 @@ public class CreatePost extends HttpServlet {
         String username = (String)session.getAttribute("user");
         //System.out.println("searching for user: "+username);
         Long personId = (Long)session.getAttribute("userId");        
-        
-        PrintWriter out = response.getWriter();
        
         try {
         	boolean isMultipart = ServletFileUpload.isMultipartContent(request);     

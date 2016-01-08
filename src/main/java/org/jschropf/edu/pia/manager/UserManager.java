@@ -33,4 +33,6 @@ public interface UserManager {
      * @return
      */
     public long userIdFinder(String username);
+
+	public void updatePicture(User user, String filename);
 }

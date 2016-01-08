@@ -88,4 +88,22 @@ public class UserDaoJpa extends GenericDaoJpa<User> implements UserDao, Serializ
         q.setParameter("personId", personId);
         return q.getResultList();
     } 
+    
+    @Override
+    public boolean updatePicture(Long personId, String filename) {
+        System.out.println("associating picture with user");
+        startTransaction();
+        try{
+        	Query q = em.createQuery("UPDATE User u SET u.picture=:filename WHERE u.id=:personId");
+        	q.setParameter("filename", filename);
+        	q.setParameter("personId", personId);
+	        q.executeUpdate();
+	    }catch(Exception e)
+        {
+	    	rollbackTransaction();
+        }
+	    commitTransaction();
+        
+        return true;
+    }
 }

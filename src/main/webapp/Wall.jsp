@@ -52,7 +52,7 @@
 		        <c:forEach var="post" items="${posts}">
 		        	<div class = "facebook-comment-box">
 	                    <div>
-	                    	<img src="./ref-material-prototype/img/${post.poster.picture}" alt="./ref-material-prototype/img/person.gif" style="width:75px;height:75px;">
+	                    	<img src="ref-material-prototype/img/${post.poster.picture}" alt="ref-material-prototype/img/person.gif" style="width:75px;height:75px;">
 	                        <a href="wall?ownerId=${post.poster.id}">${post.poster.fName} ${post.poster.lName}</a>
 	                    </div>
 	                    <h3> ${post.title}</h3>
