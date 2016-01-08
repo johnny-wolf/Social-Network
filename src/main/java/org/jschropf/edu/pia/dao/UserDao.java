@@ -32,4 +32,8 @@ public interface UserDao extends GenericDao<User> {
 
 	boolean updatePicture(Long personId, String filename);
 
+	List<User> findAllSortedByDateOfBirth(boolean isAscending);
+
+	List<User> findAllSortedByName(boolean isAscending);
+
 }

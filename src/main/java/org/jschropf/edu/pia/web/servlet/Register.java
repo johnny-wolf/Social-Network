@@ -154,6 +154,7 @@ public class Register extends HttpServlet {
 	            System.out.println(filePath);
 	            items.get(6).write(uploadedFile);
 	            userManager.updatePicture(result, result.getUsername() + "/" + fileName);
+	            
     		}
     		session.setAttribute("userId",result.getId() );
     		session.setAttribute("user",result.getUsername() );

@@ -36,43 +36,26 @@
     <div class="container">
     	<div class="row">
         	 <!-- Left bar -->
-             <jsp:include page ="profileColumn.jsp"/>
-             <!-- friend requests -->
-             <div class="col-sm-5 col-md-6">
-          <h2>Friend Requests</h2>
-          <c:forEach var="requester" items="${friendRequests}">
-          <div class = "facebook-comment-box">
-		      <a href="wall?ownerId=${requester.id}"><img src="/ref-material-prototype/img/${requester.picture}" alt="ref-material-prototype/img/default.jpg" height="100" width="100"/></a><br />
-		      <a href="wall?ownerId=${requester.id}">${requester.fName} ${requester.lName}</a>
-		      <table>
-		        <tbody>
-		          <tr>
-		            <td>
-			      <form action="acceptFriendRequest">
-		                <input type="hidden" name="sourceId" value="${requester.id}" />
-		                <input type="submit" value="Confirm" />
-			      </form>
-			    </td>
-		            <td>
-			      <form action="declineFriendRequest">
-		                <input type="hidden" name="sourceId" value="${requester.id}" />
-			        <input type="submit" value="Ignore" />
-			      </form>
-			    </td>
-		          </tr>
-		        </tbody>
-		      </table>			
-           </div>
-		    </c:forEach>
-		    </div>
-		    <div>
-			<!-- right column -->
-            <jsp:include page ="friendColumn.jsp"/>
+             <jsp:include page ="profileColumn.jsp?ownerId=${wallOwnerId}"/>
+             <!-- status window -->
+          
+          <div class="col-sm-5 col-md-6">
+          <h2>All people</h2>
+		        <c:forEach var="person" items="${allPeople}">
+		        	<div class = "facebook-comment-box">
+	                    <div>
+	                    	<img src="ref-material-prototype/img/${person.picture}" alt="ref-material-prototype/img/default.jpg" style="width:75px;height:75px;">
+	                        <a href="wall?ownerId=${person.id}">${person.username} (${person.fName} ${person.lName})</a>
+	                    </div>
+                	</div>
+		        </c:forEach>
 			</div>
+			<div>
+				<!-- right column -->
+                <jsp:include page ="/friendColumn.jsp?people=${requestScope.friends}"/>
+            </div>
 		</div>
 	</div>
-			
-		
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <!-- Latest compiled and minified JavaScript -->

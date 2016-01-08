@@ -6,5 +6,7 @@ import org.jschropf.edu.pia.domain.FriendRequestValidationException;
 public interface FriendRequestManager {
 	void releaseFriendRequest(FriendRequest newRequest) throws FriendRequestValidationException;
 
-	void acceptFriendRequest(Long sourceId, Long targetId); 
+	void acceptFriendRequest(Long sourceId, Long targetId);
+
+	void declineFriendRequest(Long sourceId, Long targetId); 
 }

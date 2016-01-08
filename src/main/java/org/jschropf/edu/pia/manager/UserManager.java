@@ -1,5 +1,7 @@
 package org.jschropf.edu.pia.manager;
 
+import java.util.List;
+
 import org.jschropf.edu.pia.domain.User;
 import org.jschropf.edu.pia.domain.UserValidationException;
 
@@ -35,4 +37,8 @@ public interface UserManager {
     public long userIdFinder(String username);
 
 	public void updatePicture(User user, String filename);
+
+	List<User> findAllSortedByDateOfBirth(boolean order);
+
+	List<User> findAllSortedByName(boolean order);
 }

@@ -65,10 +65,10 @@ public class CreatePost extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8"); 
         HttpSession session = request.getSession(true);
+        Long ownerId = (Long)request.getAttribute("wallOwnerId");
         String username = (String)session.getAttribute("user");
         //System.out.println("searching for user: "+username);
-        Long personId = (Long)session.getAttribute("userId");        
-       
+        Long personId = (Long)session.getAttribute("userId");   
         try {
         	boolean isMultipart = ServletFileUpload.isMultipartContent(request);     
             //if (isMultipart) {
@@ -102,7 +102,6 @@ public class CreatePost extends HttpServlet {
                 //String link = items.get(4).getString();
                 
                 System.out.println("Loading poster Id: "+items.get(3).getString("UTF-8"));
-                Long ownerId = (Long)request.getAttribute("ownerId");
                 if (items.get(3).getString() != null && !items.get(3).getString("UTF-8").equals("null")) {
                 	System.out.println("Parsing id to long");
                     ownerId = Long.parseLong(items.get(3).getString("UTF-8"));
@@ -117,7 +116,12 @@ public class CreatePost extends HttpServlet {
                 }
                 
             //}
-                
+        if(null == session.getAttribute("user")) {
+        	System.out.println("No user logged in!");
+            request.setAttribute("ownerId", ownerId);
+        	response.sendRedirect("wall?ownerId=" + ownerId + "&FriendError=noFriend");
+        	return;
+        }        
 		if(!personId.equals(ownerId) && !friendRequestDao.areFriends(personId, ownerId)) {
 			response.sendRedirect("wall?ownerId=" + ownerId + "&FriendError=noFriend");
 		    return;

@@ -25,7 +25,7 @@
 		            	</c:if>
 				    </c:if>
             	<ul class="nav nav-pills nav-stacked">
-                	<li><a href="#"><c:out value="${sessionScope.user}"/></a></li>
+                	<li><a href="wall?ownerId=${wallOwnerId}"><c:out value="${sessionScope.user}"/></a></li>
                 	<li><a href="#">Update Profile</a></li>
            	 	</ul>
         </div>

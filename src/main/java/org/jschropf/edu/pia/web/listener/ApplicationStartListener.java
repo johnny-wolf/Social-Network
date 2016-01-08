@@ -8,10 +8,12 @@ import org.jschropf.edu.pia.ApplicationContext;
 import org.jschropf.edu.pia.domain.FriendRequest;
 import org.jschropf.edu.pia.web.filter.AuthenticationGuard;
 import org.jschropf.edu.pia.web.servlet.AcceptFriendRequest;
+import org.jschropf.edu.pia.web.servlet.AllPeople;
 import org.jschropf.edu.pia.web.servlet.Comments;
 import org.jschropf.edu.pia.web.servlet.CreateComment;
 import org.jschropf.edu.pia.web.servlet.CreateFriendRequest;
 import org.jschropf.edu.pia.web.servlet.CreatePost;
+import org.jschropf.edu.pia.web.servlet.DeclineFriendRequest;
 import org.jschropf.edu.pia.web.servlet.FriendRequests;
 import org.jschropf.edu.pia.web.servlet.Friends;
 import org.jschropf.edu.pia.web.servlet.Login;
@@ -49,7 +51,9 @@ public class ApplicationStartListener implements ServletContextListener {
         sce.getServletContext().addServlet("friendRequests", new FriendRequests(ctx.getUserDao())).addMapping("/friendRequests");
         sce.getServletContext().addServlet("acceptFriendRequest", new AcceptFriendRequest(ctx.getFriendRequestDao(), ctx.getFriendRequestManager())).addMapping("/acceptFriendRequest");
         sce.getServletContext().addServlet("friends", new Friends(ctx.getUserDao())).addMapping("/friends");
-
+        sce.getServletContext().addServlet("declineFriendRequest", new DeclineFriendRequest(ctx.getFriendRequestDao(), ctx.getFriendRequestManager())).addMapping("/declineFriendRequest");
+        sce.getServletContext().addServlet("allPeople", new AllPeople(ctx.getUserDao(), ctx.getUserManager())).addMapping("/allPeople");
+        
         sce.getServletContext().addFilter("authFilter", new AuthenticationGuard(ctx.getAuthenticationService())).addMappingForUrlPatterns(null, false, "/secret/*");
     }
 

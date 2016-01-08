@@ -1,5 +1,7 @@
 package org.jschropf.edu.pia.manager;
 
+import java.util.List;
+
 import org.jschropf.edu.pia.dao.UserDao;
 import org.jschropf.edu.pia.domain.User;
 import org.jschropf.edu.pia.domain.UserValidationException;
@@ -67,5 +69,19 @@ public class DefaultUserManager implements UserManager {
     	User u = userDao.findByUsername(username);
     	System.out.println(u);
     	return u.getId();
+    }
+    
+    @Override
+    public List<User> findAllSortedByDateOfBirth(boolean order){
+    	List<User> u = userDao.findAllSortedByDateOfBirth(order);
+    	System.out.println(u);
+    	return u;
+    }
+    
+    @Override
+    public List<User> findAllSortedByName(boolean order){
+    	List<User> u = userDao.findAllSortedByName(order);
+    	System.out.println(u);
+    	return u;
     }
 }

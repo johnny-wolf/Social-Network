@@ -5,6 +5,8 @@ org\jschropf\edu\pia\manager\PostManager.class
 org\jschropf\edu\pia\web\servlet\AcceptFriendRequest.class
 org\jschropf\edu\pia\web\servlet\Logout.class
 org\jschropf\edu\pia\web\servlet\Wall.class
+org\jschropf\edu\pia\web\servlet\AllPeople.class
+org\jschropf\edu\pia\web\servlet\DeclineFriendRequest.class
 org\jschropf\edu\pia\web\servlet\Comments.class
 org\jschropf\edu\pia\manager\CommentManager.class
 org\jschropf\edu\pia\manager\DefaultFriendRequestManager.class

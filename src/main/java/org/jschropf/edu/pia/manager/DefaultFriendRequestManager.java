@@ -51,4 +51,19 @@ public class DefaultFriendRequestManager implements FriendRequestManager{
         friendRequestDao.commitTransaction();
         System.out.println("Friend Request Transaction Complete");
 	}
+	
+	@Override
+	public void declineFriendRequest(Long sourceId, Long targetId){
+		System.out.println("Starting Friend Request Transaction");
+		friendRequestDao.startTransaction();
+		try {
+        	friendRequestDao.declineFriendRequest(sourceId, targetId);
+            //newPost.setPoster(userDao.findById(posterId));
+        } catch (Exception e) {
+        	friendRequestDao.rollbackTransaction();
+        	System.out.println(e);
+        }
+        friendRequestDao.commitTransaction();
+        System.out.println("Friend Request Transaction Complete");
+	}
 }

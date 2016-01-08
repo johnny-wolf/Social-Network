@@ -106,4 +106,18 @@ public class UserDaoJpa extends GenericDaoJpa<User> implements UserDao, Serializ
         
         return true;
     }
+    
+    @Override
+    public List<User> findAllSortedByName(boolean isAscending) {
+    	String order = isAscending ? "ASC" : "DESC";
+    	Query q = em.createQuery("SELECT u FROM User u ORDER BY u.fName " + order + ", u.lName " + order);
+    	return q.getResultList();
+    }
+
+    @Override
+    public List<User> findAllSortedByDateOfBirth(boolean isAscending) {
+    	String order = isAscending ? "ASC" : "DESC";
+    	Query q = em.createQuery("SELECT u FROM User u ORDER BY p.birthDate " + order);
+    	return q.getResultList();
+     } 
 }

@@ -41,8 +41,9 @@
              <div class="col-sm-5 col-md-6">
           <h2>Friend Requests</h2>
           <c:forEach var="requester" items="${friendRequests}">
-		      <a href="profile?personId=${requester.id}">${requester.fName} ${requester.lName}</a><br />
-		      <a href="profile?personId=${requester.id}"><img src="./ref-material-prototype/img/${requester.picture}" height="100"/></a>
+          <div class = "facebook-comment-box">
+		      <a href="wall?ownerId=${requester.id}"><img src="/ref-material-prototype/img/${requester.picture}" alt="ref-material-prototype/img/default.jpg" height="100" width="100"/></a><br />
+		      <a href="wall?ownerId=${requester.id}">${requester.fName} ${requester.lName}</a>
 		      <table>
 		        <tbody>
 		          <tr>
@@ -60,7 +61,8 @@
 			    </td>
 		          </tr>
 		        </tbody>
-		      </table>
+		      </table>			
+           </div>
 		    </c:forEach>
 		    </div>
 		    <div>
