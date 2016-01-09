@@ -18,6 +18,7 @@ import org.jschropf.edu.pia.domain.PostValidationException;
 import org.jschropf.edu.pia.manager.CommentManager; 
 
 public class CreateComment extends HttpServlet{
+	private static final long serialVersionUID = 1L;
 	@EJB
     private CommentDao commentDao;
 	

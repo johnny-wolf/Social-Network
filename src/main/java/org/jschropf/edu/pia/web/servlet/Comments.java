@@ -17,6 +17,7 @@ import org.jschropf.edu.pia.dao.CommentDao;
 import org.jschropf.edu.pia.domain.Comment;
 
 public class Comments extends HttpServlet{
+	private static final long serialVersionUID = 1L;
     
     @EJB
     private CommentDao commentDao;

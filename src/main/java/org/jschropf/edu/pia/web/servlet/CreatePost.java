@@ -34,7 +34,8 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 //@WebServlet(name = "CreatePost", urlPatterns = {"/createPost"})
-public class CreatePost extends HttpServlet {	
+public class CreatePost extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 	@EJB
     private UserDao userDao;
 	@EJB

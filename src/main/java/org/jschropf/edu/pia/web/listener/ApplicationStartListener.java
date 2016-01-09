@@ -42,7 +42,6 @@ public class ApplicationStartListener implements ServletContextListener {
         sce.getServletContext().addServlet("login", new Login(ctx.getAuthenticationService(),ctx.getEm())).addMapping("/login");
         sce.getServletContext().addServlet("logout", new Logout()).addMapping("/logout");
         sce.getServletContext().addServlet("register", new Register(ctx.getUserManager(),ctx.getEm())).addMapping("/register");
-        sce.getServletContext().addServlet("secret", new SecretServlet()).addMapping("/secret/vip");
         sce.getServletContext().addServlet("createPost", new CreatePost(ctx.getPostManager(), ctx.getFriendRequestDao(), ctx.getPostDao())).addMapping("/createPost");
         sce.getServletContext().addServlet("wall", new Wall(ctx.getPostDao(), ctx.getUserDao())).addMapping("/wall");
         sce.getServletContext().addServlet("createComment", new CreateComment(ctx.getCommentDao(), ctx.getCommentManager())).addMapping("/createComment");

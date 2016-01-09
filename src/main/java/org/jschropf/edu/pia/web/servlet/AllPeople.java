@@ -17,6 +17,7 @@ import org.jschropf.edu.pia.domain.User;
 import org.jschropf.edu.pia.manager.UserManager;
 
 public class AllPeople extends HttpServlet{
+	private static final long serialVersionUID = 1L;
 	@EJB
 	private UserDao userDao;
 	

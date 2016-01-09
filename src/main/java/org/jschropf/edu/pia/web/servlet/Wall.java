@@ -20,6 +20,7 @@ import org.jschropf.edu.pia.domain.User;
 
 //@WebServlet(name = "Wall", urlPatterns = {"/wall"}) 
 public class Wall extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 
 	@EJB
     private PostDao postDao;

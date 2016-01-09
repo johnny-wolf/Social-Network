@@ -37,6 +37,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * @author Jakub Danek
  */
 public class Register extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 
     private static final String USERNAME_PARAMETER = "username";
     private static final String PASSWORD_PARAMETER = "password";
@@ -134,8 +135,6 @@ public class Register extends HttpServlet {
         	System.out.println(username+" "+password+" "+fname+" "+lname+" "+birthdate);
         	if(birthdate != null || birthdate !="")
         		userManager.register(new User(username, password, fname, lname, convertUtilDateToSqlDate(bdate)));
-        	else
-        		userManager.register(new User(username, password, fname, lname, null));
         	
         	Query query = em.createNamedQuery("User.findByUserName", User.class).setParameter("username", username);
             User result = (User)query.getSingleResult();
@@ -145,11 +144,11 @@ public class Register extends HttpServlet {
     		String filePath = uploadFolder + File.separator + result.getUsername() + "/" + fileName;
     		System.out.println("Setting the file path: " + filePath);
     		if(fileName != "" || !fileName.isEmpty()){
-	    		 File uploadDir = new File(uploadFolder + File.separator + result.getUsername());
+	    		 /*File uploadDir = new File(uploadFolder + File.separator + result.getUsername());
 	    		 System.out.println("Testing dir: " + uploadDir.toString());
 	             if (!uploadDir.exists()) {
 	                 uploadDir.mkdir();
-	             }
+	             }*/
 	            File uploadedFile = new File(filePath);
 	            System.out.println(filePath);
 	            String newName = randomString(10, fileName);

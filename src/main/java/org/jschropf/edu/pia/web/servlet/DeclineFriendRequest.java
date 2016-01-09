@@ -14,6 +14,7 @@ import org.jschropf.edu.pia.dao.FriendRequestDao;
 import org.jschropf.edu.pia.manager.FriendRequestManager; 
 
 public class DeclineFriendRequest extends HttpServlet{
+	private static final long serialVersionUID = 1L;
 	@EJB
     private FriendRequestDao friendRequestDao;
 	@EJB

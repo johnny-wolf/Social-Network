@@ -44,6 +44,7 @@
 		        <c:forEach var="person" items="${allPeople}">
 		        	<div class = "facebook-comment-box">
 	                    <div>
+	                    	<p>ref-material-prototype/img/${person.picture}</p>
 	                    	<img src="ref-material-prototype/img/${person.picture}" alt="ref-material-prototype/img/default.jpg" style="width:75px;height:75px;">
 	                        <a href="wall?ownerId=${person.id}">${person.username} (${person.fName} ${person.lName})</a>
 	                    </div>

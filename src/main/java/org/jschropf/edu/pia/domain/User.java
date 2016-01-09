@@ -154,6 +154,7 @@ public class User extends BaseObject {
         sb.append("username='").append(username).append('\'');
         sb.append("first name='").append(fName).append('\'');
         sb.append("last name='").append(lName).append('\'');
+        sb.append("picture='").append(picture).append('\'');
         sb.append('}');
         return sb.toString();
     }

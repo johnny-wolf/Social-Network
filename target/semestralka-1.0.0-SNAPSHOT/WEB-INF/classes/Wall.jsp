@@ -8,53 +8,74 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="./bootstrap-3.3.5-dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="./bootstrap-3.3.5-dist/css/status-style.css" />
-    <title></title>
+    <title>ITNet</title>
 </head>
 <body>
-
-<c:if test="${not empty requestScope.err}">
-    <p>
-        Error: ${requestScope.err}
-    </p>
-</c:if>
 <c:choose>
     <c:when test="${not empty sessionScope.user}">
 		<jsp:include page="headerLogged.jsp"/>
     </c:when>
     <c:otherwise>
-    	<jsp:include page="headerLogged.jsp"/>
+    	<jsp:include page="header.jsp"/>
     </c:otherwise>
 </c:choose>
+<c:if test="${not empty requestScope.err}">
+    <p>
+        Error: ${requestScope.err}
+    </p>
+</c:if>
+ <p>Session atributes</p>
 <c:forEach items="${sessionScope}" var="attr">
+    ${attr.key}=${attr.value}<br>
+</c:forEach>
+<p>Request atributes</p>
+<c:forEach items="${requestScope}" var="attr">
     ${attr.key}=${attr.value}<br>
 </c:forEach>
  <!-- zacatek obsahu -->
     <div class="container">
     	<div class="row">
         	 <!-- Left bar -->
-             <div class="col-sm-3 col-md-2 left-menu">
-             	<h1>Profil</h1>
-            	<ul class="nav nav-pills nav-stacked">
-                	<li><a href="#"><c:out value="${sessionScope.user}"/></a></li>
-                	<li><a href="#">Upravit profil</a></li>
-           	 	</ul>
-        	 </div>
+             <jsp:include page ="profileColumn.jsp?ownerId=${wallOwnerId}"/>
              <!-- status window -->
+          
           <div class="col-sm-5 col-md-6">
-            <jsp:include page="addPost.jsp"/>     
-			</div>>
+          <h2>Posts</h2>
+          	<c:if test="${param.FriendError eq 'noFriend'}">
+			    <p>
+			        Adding post not permitted!
+			    </p>
+			</c:if>  
+          	<a href="wall?ownerId=${wallOwnerId}">Chronological</a> |
+   			<a href="wall?ownerId=${wallOwnerId}&filter=popular">Popular</a>
+            <jsp:include page="addPost.jsp"/>
+		        <c:forEach var="post" items="${posts}">
+		        	<div class = "facebook-comment-box">
+	                    <div>
+	                    	<img src="ref-material-prototype/img/${post.poster.picture}" alt="ref-material-prototype/img/default.jpg" style="width:75px;height:75px;">
+	                        <a href="wall?ownerId=${post.poster.id}">${post.poster.fName} ${post.poster.lName}</a>
+	                    </div>
+	                    <h3> ${post.title}</h3>
+	                    <div class = "facebook-comment-status">
+	                    	<p>${post.text}</p>
+	                    </div>
+	                    <div>
+	                    	<p> ${post.formattedDate} | <a href"">Like</a> ${post.popularity} Liked</p>
+	                    	<p><i><a href="comments?postId=${post.id}&wallOwnerId=${wallOwnerId}">View/Add Comments</a></i></p>
+	                    </div>
+                	</div>
+                		                    	<c:if test="${requestScope.commentActive eq post.id}">
+							    <p>
+							        <jsp:include page="comment.jsp?postId=${post.id}&comments=${requestScope.comments}"/>
+							    </p>
+							</c:if>
+		        </c:forEach>
+    
+			</div>
+			<div>
 				<!-- right column -->
-                <div class="col-sm-3 col-md-3 right-menu">
-                <h1>Přátelé</h1>
-                <div class="facebook-search-area">
-                             <textarea rows="1" placeholder="Hledat..."></textarea> 
+                <jsp:include page ="/friendColumn.jsp?people=${requestScope.friends}"/>
                 </div>
-                <ul>
-                    <li>
-                        <img src="./ref-material-prototype/img/prof2.png" alt="Mountain View" style="width:40px;height:40px;"> <a href="">Annie </a>
-                    </li>
-                </ul>
-             </div>
 		</div>
 	</div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

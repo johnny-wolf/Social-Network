@@ -11,7 +11,7 @@
 </head>
 <body>
 <c:if test="${not empty sessionScope.user}">
-	<c:redirect url="/Wall.jsp" />
+	<c:redirect url="/wall?ownerId=${userId}" />
 </c:if>
 <jsp:include page="header.jsp"/>
 <c:if test="${not empty requestScope.err}">
@@ -21,40 +21,40 @@
 </c:if>
 <div class="container">
         <div class="col-sm-6 col-md-6 index-left-menu">
-        	<h1>Zaregistrovat se</h1>
-            <p>ITNet byl, je a bude zdarma</p>
-            <p>* povinné údaje</p>
+        	<h1>Register</h1>
+            <p>ITNet was, is and will be always for free</p>
+            <p>* Credentials</p>
 
-            <form name="new_user_form" action="register" method="post">
+            <form name="new_user_form" action="register" method="post" enctype="multipart/form-data">
                 <div>
                     <div class="form-group">
-                        <label for="username">*Uživatelské jméno:</label>
-                        <input class="form-control" type="text" id="username" name="username"/>
+                        <label for="username">*User name:</label>
+                        <input class="form-control" type="text" id="username" name="username" value="${requestScope.username}"/>
                     </div>
                     <div class="form-group">
-                        <label for="pass">*Heslo:</label>
+                        <label for="pass">*Password:</label>
                         <input class="form-control" type="password" id="pass" name="password"/>
                     </div>
                     <div class="form-group">
-                        <label for="pass2">*Heslo znovu:</label>
+                        <label for="pass2">*Confirm password:</label>
                         <input class="form-control" type="password" id="pass2" name="confirmPwd"/>
                     </div>
 					<div class="form-group">
-                        <label for="username">Jméno:</label>
-                        <input class="form-control" type="text" id="fname" name="fname"/>
+                        <label for="username">First name:</label>
+                        <input class="form-control" type="text" id="fname" name="fname" value="${requestScope.fname}"/>
                     </div>
                     <div class="form-group">
-                        <label for="username">Příjmení:</label>
-                        <input class="form-control" type="text" id="lname" name="lname"/>
+                        <label for="username">Last name:</label>
+                        <input class="form-control" type="text" id="lname" name="lname" value="${requestScope.lname}" />
                     </div>
                     <div class="form-group">
-                        <label for="birthdate">Datum narození:</label>
-                        <input class="form-control" type="date" id="birthdate" name="birthdate" placeholder="dd/MM/yyyy"/>
+                        <label for="birthdate">Birth date:</label>
+						<input class="form-control" type="date" id="birthdate" name="birthdate" placeholder="dd/MM/yyyy" value="${requestScope.birthdate}"/>  
                     </div>
-                    <%--<div class="form-group">
-                        <label for="email">E-mail:</label>
-                        <input class="form-control" type="text" id="email" name="email"/>
-                    </div> --%>
+                    <div class="form-group">
+                        <label for="picture">Profile picture:</label>
+                        <input class="form-control" type="file" id="picture" name="picture"/>
+                    </div>
                     <div>
                     <button class="btn btn-primary" type="submit" value="Potvrdit">Potvrdit</button>
                     <button class="btn btn-default" type="reset" value="Reset">Reset</button>

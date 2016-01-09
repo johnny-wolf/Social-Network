@@ -58,7 +58,8 @@ public class DefaultUserManager implements UserManager {
     @Override
     public void updatePicture(User user, String filename){
         try {
-            userDao.updatePicture(user.getId(), filename);
+            if(userDao.updatePicture(user.getId(), filename))
+            	System.out.println("Update done");
         } catch (Exception e) {
             System.out.println(e);
         }

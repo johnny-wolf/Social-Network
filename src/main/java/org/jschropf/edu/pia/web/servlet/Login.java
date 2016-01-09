@@ -21,6 +21,7 @@ import org.jschropf.edu.pia.web.auth.AuthenticationService;
  * @author Jakub Danek
  */
 public class Login extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 
     private static final String USERNAME_PARAMETER = "username";
     private static final String PASSWORD_PARAMETER = "password";
