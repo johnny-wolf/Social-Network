@@ -1,8 +1,9 @@
 package org.jschropf.edu.pia.web.auth;
-
 import javax.servlet.http.HttpSession;
 
 import org.jschropf.edu.pia.manager.UserManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Wrapper around HttpSession providing authentication functionality.
@@ -11,14 +12,14 @@ import org.jschropf.edu.pia.manager.UserManager;
  *
  * @author Jakub Danek
  */
+@Service
 public class AuthenticationService {
 
     private static final String USER = "user";
-    private static final String USER_ID = "userId";
-    private static final String OWNER_ID = "ownerId";
 
     private UserManager userManager;
 
+    @Autowired
     public AuthenticationService(UserManager userManager) {
         this.userManager = userManager;
     }
@@ -33,12 +34,9 @@ public class AuthenticationService {
      */
     public boolean authenticate(HttpSession session, String username, String password) {
         boolean authenticated = userManager.authenticate(username, password);
-        long userId = userManager.userIdFinder(username);
 
         if(authenticated) {
             session.setAttribute(USER, username);
-            session.setAttribute(USER_ID, userId);
-            session.setAttribute(OWNER_ID, userId);
             return true;
         }
 
@@ -53,4 +51,4 @@ public class AuthenticationService {
     public boolean isLoggedIn(HttpSession session) {
         return session.getAttribute(USER) != null;
     }
-}
+}  

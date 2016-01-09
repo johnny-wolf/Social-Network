@@ -13,8 +13,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class NotificationDaoJpa extends GenericDaoJpa<Notification> implements NotificationDao{
-	public NotificationDaoJpa(EntityManager em) {
-        super(em, Notification.class);
+	public NotificationDaoJpa() {
+        super(Notification.class);
     }
 	
 	@Override

@@ -2,7 +2,6 @@ package org.jschropf.edu.pia.web.servlet;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -10,24 +9,17 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.jschropf.edu.pia.ApplicationContext;
+
 import org.jschropf.edu.pia.domain.User;
-import org.jschropf.edu.pia.domain.UserValidationException;
 import org.jschropf.edu.pia.manager.UserManager;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * Servlet handling user registration requests.
@@ -36,7 +28,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *
  * @author Jakub Danek
  */
-public class Register extends HttpServlet {
+public class Register extends AbstractServlet {
 	private static final long serialVersionUID = 1L;
 
     private static final String USERNAME_PARAMETER = "username";
@@ -54,11 +46,11 @@ public class Register extends HttpServlet {
     static Random rnd = new Random();
 
     private UserManager userManager;
-    private EntityManager em;
+    //private EntityManager em;
 
-    public Register(UserManager userManager, EntityManager em) {
+    public Register(UserManager userManager) {
         this.userManager = userManager;
-        this.em = em;
+        //this.em = em;
     }
     
     @Override
@@ -71,27 +63,9 @@ public class Register extends HttpServlet {
     	resp.setContentType("text/html;charset=UTF-8");
     	req.setCharacterEncoding("UTF-8"); 
     	HttpSession session = req.getSession(true);
-    	String username = req.getParameter(USERNAME_PARAMETER);
-        String password = req.getParameter(PASSWORD_PARAMETER);
-        String confirmPwd = req.getParameter(CONFIRM_PWD_PARAMETER);
-        String fname = req.getParameter(FIRSTNAME_PARAMETER);
-        String lname = req.getParameter(LASTNAME_PARAMETER);
-        String birthdate = req.getParameter(BIRTH_DATE_PARAMETER);
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy",Locale.ENGLISH);
-        Date bdate = null;
-        if(birthdate != null || birthdate !=""){
-			try {
-				System.out.println("Converting date "+birthdate);
-				bdate = format.parse(birthdate);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-				System.out.println(e1);
-			}	
-        }
-        
+
 		try {
-			//boolean isMultipart = ServletFileUpload.isMultipartContent(req);     
                 DiskFileItemFactory factory = new DiskFileItemFactory();
                 factory.setSizeThreshold(MAX_MEMORY_SIZE);
                 factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
@@ -105,18 +79,20 @@ public class Register extends HttpServlet {
 					System.out.println(i.toString());
                 }
                 
-                username = items.get(0).getString("UTF-8");
+                String username = items.get(0).getString("UTF-8");
                 System.out.println("Loaded username: "+username);
-                password = items.get(1).getString("UTF-8");
+                String password = items.get(1).getString("UTF-8");
                 System.out.println("Loaded pass: "+password);
-                confirmPwd = items.get(2).getString("UTF-8");
+                String confirmPwd = items.get(2).getString("UTF-8");
                 System.out.println("Loaded cpass: "+confirmPwd);
-                fname = items.get(3).getString("UTF-8");
+                String fname = items.get(3).getString("UTF-8");
                 System.out.println("Loaded first name: "+fname);
-                lname = items.get(4).getString("UTF-8");
+                String lname = items.get(4).getString("UTF-8");
                 System.out.println("Loaded last name: "+fname);
-                birthdate = items.get(5).getString("UTF-8");
+                String birthdate = items.get(5).getString("UTF-8");
                 System.out.println("Loaded birthdate: "+fname);
+                
+                Date bdate = null;
                 
                 if(birthdate != null || birthdate !=""){
         			try {
@@ -136,27 +112,22 @@ public class Register extends HttpServlet {
         	if(birthdate != null || birthdate !="")
         		userManager.register(new User(username, password, fname, lname, convertUtilDateToSqlDate(bdate)));
         	
-        	Query query = em.createNamedQuery("User.findByUserName", User.class).setParameter("username", username);
-            User result = (User)query.getSingleResult();
+            User result = userManager.findByUsername(username);
         	
         	String fileName = new File(items.get(6).getName()).getName();
         	System.out.println("Setting the file name: " +fileName );
     		String filePath = uploadFolder + File.separator + result.getUsername() + "/" + fileName;
     		System.out.println("Setting the file path: " + filePath);
     		if(fileName != "" || !fileName.isEmpty()){
-	    		 /*File uploadDir = new File(uploadFolder + File.separator + result.getUsername());
-	    		 System.out.println("Testing dir: " + uploadDir.toString());
-	             if (!uploadDir.exists()) {
-	                 uploadDir.mkdir();
-	             }*/
-	            File uploadedFile = new File(filePath);
+	           
+    			File uploadedFile = new File(filePath);
 	            System.out.println(filePath);
 	            String newName = randomString(10, fileName);
 	            uploadedFile = new File(uploadFolder + File.separator + newName);
 	            System.out.println(uploadFolder + File.separator + newName);
 	            items.get(6).write(uploadedFile);
 	            userManager.updatePicture(result, newName);
-	            
+	           
     		}
     		session.setAttribute("userId",result.getId() );
     		session.setAttribute("user",result.getUsername() );

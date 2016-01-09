@@ -17,16 +17,16 @@ import org.jschropf.edu.pia.domain.CommentValidationException;
 import org.jschropf.edu.pia.domain.PostValidationException;
 import org.jschropf.edu.pia.manager.CommentManager; 
 
-public class CreateComment extends HttpServlet{
+public class CreateComment extends AbstractServlet{
 	private static final long serialVersionUID = 1L;
-	@EJB
-    private CommentDao commentDao;
+	/*@EJB
+    private CommentDao commentDao;*/
 	
 	@EJB
 	private CommentManager commentManager;
 
-	public CreateComment(CommentDao commentDao, CommentManager commentManager){
-		this.commentDao = commentDao;
+	public CreateComment(CommentManager commentManager){
+		//this.commentDao = commentDao;
 		this.commentManager = commentManager;
 	}
     /** 
@@ -52,9 +52,9 @@ public class CreateComment extends HttpServlet{
             String text = request.getParameter("text");
             Long postId = Long.parseLong(request.getParameter("postId"));
             Long ownerId = Long.parseLong(request.getParameter("wallOwnerId"));
-            Comment temp = commentDao.createComment(text, personId, postId);
+            //Comment temp = commentDao.createComment(text, personId, postId);
             try {
-				commentManager.releaseComment(temp, personId);
+				commentManager.releaseComment(personId, text, postId);
 			} catch (CommentValidationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

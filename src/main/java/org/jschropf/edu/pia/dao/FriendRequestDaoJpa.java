@@ -13,8 +13,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements FriendRequestDao {
-	public FriendRequestDaoJpa(EntityManager em) {
-        super(em, FriendRequest.class);
+	public FriendRequestDaoJpa() {
+        super(FriendRequest.class);
     }
 	
 	@Override

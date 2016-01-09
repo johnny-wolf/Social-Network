@@ -2,10 +2,13 @@ package org.jschropf.edu.pia.manager;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.jschropf.edu.pia.dao.UserDao;
 import org.jschropf.edu.pia.domain.User;
 import org.jschropf.edu.pia.domain.UserValidationException;
 import org.jschropf.edu.pia.utils.Encoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,11 +17,15 @@ import org.springframework.stereotype.Service;
  * @author Jakub Danek
  */
 @Service
+@Transactional
 public class DefaultUserManager implements UserManager {
 
+
     private UserDao userDao;
+	
     private Encoder encoder;
 
+    @Autowired
     public DefaultUserManager(UserDao userDao, Encoder encoder) {
         this.userDao = userDao;
         this.encoder = encoder;
@@ -46,13 +53,13 @@ public class DefaultUserManager implements UserManager {
 
         newUser.setPassword(encoder.encode(newUser.getPassword()));
 
-        userDao.startTransaction();
+        //userDao.startTransaction();
         try {
             userDao.save(newUser);
         } catch (Exception e) {
-            userDao.rollbackTransaction();
+            //userDao.rollbackTransaction();
         }
-        userDao.commitTransaction();
+       //userDao.commitTransaction();
     }
     
     @Override
@@ -84,5 +91,35 @@ public class DefaultUserManager implements UserManager {
     	List<User> u = userDao.findAllSortedByName(order);
     	System.out.println(u);
     	return u;
+    }
+    
+    @Override
+    public User findByUsername(String username){
+    	User user = userDao.findByUsername(username);
+    	return user;
+    }
+    
+    @Override
+    public List<User> friendsSortedByDateOfBirth(Long personId, boolean order){
+    	List<User> friends = userDao.friendsSortedByDateOfBirth(personId, order);
+    	return friends;
+    }
+    
+    @Override
+    public List <User> friendsSortedByName(Long personId, boolean order){
+    	List<User> friends = userDao.friendsSortedByName(personId, order);
+    	return friends;
+    }
+    
+    @Override
+    public List<User> nonFriendsFor(Long personId){
+    	List<User> nonFriends = userDao.nonFriendsFor(personId);
+    	return nonFriends;
+    }
+    
+    @Override
+    public List<User> unansweredFriendRequestsFor(Long personId){
+    	List<User> unanswered = userDao.unansweredFriendRequestsFor(personId);
+    	return unanswered;
     }
 }

@@ -16,20 +16,25 @@ import org.jschropf.edu.pia.dao.PostDao;
 import org.jschropf.edu.pia.dao.UserDao;
 import org.jschropf.edu.pia.domain.Comment;
 import org.jschropf.edu.pia.domain.Post;
-import org.jschropf.edu.pia.domain.User; 
+import org.jschropf.edu.pia.domain.User;
+import org.jschropf.edu.pia.manager.PostManager;
+import org.jschropf.edu.pia.manager.UserManager; 
 
 //@WebServlet(name = "Wall", urlPatterns = {"/wall"}) 
-public class Wall extends HttpServlet {
+public class Wall extends AbstractServlet {
 	private static final long serialVersionUID = 1L;
 
 	@EJB
-    private PostDao postDao;
+	private PostManager postManager;
+    //private PostDao postDao;
 	
-	private UserDao userDao; 
+	@EJB
+	private UserManager userManager;
+	//private UserDao userDao; 
 	
-	public Wall(PostDao postDao, UserDao userDao){
-		this.postDao = postDao;
-		this.userDao = userDao;
+	public Wall(PostManager postManager, UserManager userManager){
+		this.postManager = postManager;
+		this.userManager = userManager;
 	}
 	
 	 /** 
@@ -65,10 +70,10 @@ public class Wall extends HttpServlet {
         List<Post> posts = null;
 	if(request.getParameter("filter") != null && request.getParameter("filter").equals("popular")){	
 		System.out.println("Writing top ten on wall");
-		posts = postDao.topTenFor(ownerId);
+		posts = postManager.topTenFor(ownerId);
 	} else {
 		System.out.println("Writing all on wall");
-		posts = postDao.wallFor(ownerId);
+		posts = postManager.wallFor(ownerId);
 	}
         request.setAttribute("posts", posts);
 	// sending this so we can use it in links
@@ -84,11 +89,11 @@ public class Wall extends HttpServlet {
 	    boolean order = (orderParam == null || !orderParam.equals("DESC"));
 	    String orderBy = request.getParameter("orderBy");
 	    if(orderBy != null && orderBy.equals("dateOfBirth")) {
-		friends = userDao.friendsSortedByDateOfBirth(personId, order);
+		friends = userManager.friendsSortedByDateOfBirth(personId, order);
 	    } else {
-		friends = userDao.friendsSortedByName(personId, order);
+		friends = userManager.friendsSortedByName(personId, order);
 	    }
-	    List<User> nonFriends = userDao.nonFriendsFor(personId);
+	    List<User> nonFriends = userManager.nonFriendsFor(personId);
 	    
 	    request.setAttribute("people", friends);
 	    

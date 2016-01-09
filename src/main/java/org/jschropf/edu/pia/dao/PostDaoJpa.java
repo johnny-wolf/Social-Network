@@ -15,19 +15,20 @@ import javax.persistence.TypedQuery;
 import org.jschropf.edu.pia.domain.Picture;
 import org.jschropf.edu.pia.domain.Post;
 import org.jschropf.edu.pia.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao{
-	@EJB
+	@Autowired
 	private UserDao userDao;
-	@EJB
+	@Autowired
 	private NotificationDao notificationDao;
-	@EJB
+	@Autowired
 	private PictureDao pictureDao; 
 	
-	public PostDaoJpa(EntityManager em, UserDao userDao, NotificationDao notificationDao) {
-        super(em, Post.class);
+	public PostDaoJpa() {
+        super(Post.class);
         this.userDao = userDao;
         this.notificationDao = notificationDao;
     }

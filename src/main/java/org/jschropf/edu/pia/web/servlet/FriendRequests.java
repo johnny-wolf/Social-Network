@@ -13,15 +13,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.jschropf.edu.pia.dao.UserDao;
-import org.jschropf.edu.pia.domain.User; 
+import org.jschropf.edu.pia.domain.User;
+import org.jschropf.edu.pia.manager.UserManager; 
 
-public class FriendRequests extends HttpServlet{
+public class FriendRequests extends AbstractServlet{
 	private static final long serialVersionUID = 1L;
 	@EJB
-    private UserDao userDao;
+    private UserManager userManager;
 	
-	public FriendRequests(UserDao userDao){
-		this.userDao = userDao;
+	public FriendRequests(UserManager userManager){
+		this.userManager = userManager;
 	}
 	
     /** 
@@ -39,7 +40,7 @@ public class FriendRequests extends HttpServlet{
         Long personId = (Long)session.getAttribute("userId");
         PrintWriter out = response.getWriter();
         try {            
-            List<User> unansweredFriendRequests = userDao.unansweredFriendRequestsFor(personId);
+            List<User> unansweredFriendRequests = userManager.unansweredFriendRequestsFor(personId);
 	    request.setAttribute("friendRequests", unansweredFriendRequests);
 	    ctx.getRequestDispatcher("/friendRequests.jsp").forward(request, response);
 	    return;

@@ -19,11 +19,13 @@ public interface GenericDao<T extends BaseObject> {
 
     /*
         Transaction handling, very crude, there are better ways to do this.
-     */
+    
 
     void startTransaction();
 
     void commitTransaction();
 
     void rollbackTransaction();
+    
+    */
 }

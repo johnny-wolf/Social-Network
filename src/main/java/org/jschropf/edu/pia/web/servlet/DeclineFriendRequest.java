@@ -13,15 +13,13 @@ import javax.servlet.http.HttpSession;
 import org.jschropf.edu.pia.dao.FriendRequestDao;
 import org.jschropf.edu.pia.manager.FriendRequestManager; 
 
-public class DeclineFriendRequest extends HttpServlet{
+public class DeclineFriendRequest extends AbstractServlet{
 	private static final long serialVersionUID = 1L;
-	@EJB
-    private FriendRequestDao friendRequestDao;
+
 	@EJB
 	private FriendRequestManager friendRequestManager;
 
-	public DeclineFriendRequest(FriendRequestDao friendRequestDao, FriendRequestManager friendRequestManager){
-		this.friendRequestDao = friendRequestDao;
+	public DeclineFriendRequest(FriendRequestManager friendRequestManager){
 		this.friendRequestManager = friendRequestManager;
 	}
     /** 

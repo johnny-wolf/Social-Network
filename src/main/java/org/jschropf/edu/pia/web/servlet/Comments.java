@@ -15,15 +15,16 @@ import javax.servlet.http.HttpSession;
 
 import org.jschropf.edu.pia.dao.CommentDao; 
 import org.jschropf.edu.pia.domain.Comment;
+import org.jschropf.edu.pia.manager.CommentManager;
 
-public class Comments extends HttpServlet{
+public class Comments extends AbstractServlet{
 	private static final long serialVersionUID = 1L;
     
     @EJB
-    private CommentDao commentDao;
+    private CommentManager commentManager;
 
-    public Comments(CommentDao commentDao){
-    	this.commentDao = commentDao;
+    public Comments(CommentManager commentManager){
+    	this.commentManager = commentManager;
     }
     
     /** 
@@ -47,7 +48,7 @@ public class Comments extends HttpServlet{
 //        }
         Long postId = Long.parseLong(request.getParameter("postId"));  
         System.out.println("Loading comments for post: "+postId);
-        List<Comment> comments = commentDao.commentsFor(postId);
+        List<Comment> comments = commentManager.commentsFor(postId);
         request.setAttribute("comments", comments);
         request.setAttribute("commentActive", postId);
         request.setAttribute("wallOwnerId", ownerId);

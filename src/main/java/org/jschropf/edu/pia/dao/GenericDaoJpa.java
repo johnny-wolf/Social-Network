@@ -1,9 +1,9 @@
 package org.jschropf.edu.pia.dao;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.jschropf.edu.pia.domain.BaseObject;
-import org.springframework.stereotype.Repository;
 
 /**
  * JPA implementation of the {@link GenericDao} interface.
@@ -12,17 +12,16 @@ import org.springframework.stereotype.Repository;
  *
  * @author Jakub Danek
  */
-@Repository
 public class GenericDaoJpa<T extends BaseObject> implements GenericDao<T> {
 
+	@PersistenceContext 
     protected EntityManager em;
     private Class<T> persistedType;
 
     /**
-     * @param em entity manager instance this DAO wraps
      * @param persistedType type of the entity persisted by this DAO
      */
-    public GenericDaoJpa(EntityManager em, Class<T> persistedType) {
+    public GenericDaoJpa(Class<T> persistedType) {
         this.em = em;
         this.persistedType = persistedType;
     }
@@ -49,7 +48,7 @@ public class GenericDaoJpa<T extends BaseObject> implements GenericDao<T> {
         }
     }
 
-    @Override
+    /*@Override
     public void startTransaction() {
         em.getTransaction().begin();
     }
@@ -62,5 +61,5 @@ public class GenericDaoJpa<T extends BaseObject> implements GenericDao<T> {
     @Override
     public void rollbackTransaction() {
         em.getTransaction().rollback();
-    }
+    }*/
 }

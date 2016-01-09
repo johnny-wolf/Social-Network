@@ -41,4 +41,14 @@ public interface UserManager {
 	List<User> findAllSortedByDateOfBirth(boolean order);
 
 	List<User> findAllSortedByName(boolean order);
+
+	User findByUsername(String username);
+
+	List<User> friendsSortedByDateOfBirth(Long personId, boolean order);
+
+	List<User> friendsSortedByName(Long personId, boolean order);
+
+	List<User> nonFriendsFor(Long personId);
+
+	List<User> unansweredFriendRequestsFor(Long personId);
 }

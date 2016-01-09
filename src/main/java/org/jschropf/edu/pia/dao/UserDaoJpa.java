@@ -19,8 +19,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserDaoJpa extends GenericDaoJpa<User> implements UserDao, Serializable {
     private static final long serialVersionUID = 1L;
-    public UserDaoJpa(EntityManager em) {
-        super(em, User.class);
+    public UserDaoJpa() {
+        super(User.class);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class UserDaoJpa extends GenericDaoJpa<User> implements UserDao, Serializ
     @Override
     public boolean updatePicture(Long personId, String filename) {
         System.out.println("associating picture with user");
-        startTransaction();
+        //startTransaction();
         try{
         	//Query q = em.createQuery("UPDATE User u SET u.picture=:filename WHERE u.id=:personId");
         	TypedQuery<User> q = em.createQuery("SELECT u FROM User u WHERE u.id = :uid", User.class);
@@ -105,9 +105,9 @@ public class UserDaoJpa extends GenericDaoJpa<User> implements UserDao, Serializ
 	        q.executeUpdate();*/
 	    }catch(Exception e)
         {
-	    	rollbackTransaction();
+	    	//rollbackTransaction();
         }
-	    commitTransaction();
+	    //commitTransaction();
         
         return true;
     }

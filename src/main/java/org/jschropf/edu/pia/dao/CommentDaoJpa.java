@@ -12,25 +12,26 @@ import javax.persistence.TypedQuery;
 import org.jschropf.edu.pia.domain.Comment;
 import org.jschropf.edu.pia.domain.Post;
 import org.jschropf.edu.pia.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class CommentDaoJpa extends GenericDaoJpa<Comment> implements CommentDao{
 
-    @EJB
+    @Autowired
     private NotificationDao notificationDao;
     
-    @EJB
+    @Autowired
     private PostDao postDao;
     
-    @EJB
-    private UserDao UserDao;
+    @Autowired
+    private UserDao userDao;
 	
-	public CommentDaoJpa(EntityManager em, NotificationDao notificationDao, PostDao postDao, UserDao userDao) {
-        super(em, Comment.class);
+	public CommentDaoJpa() {
+        super(Comment.class);
         this.notificationDao = notificationDao;
         this.postDao = postDao;
-        this.UserDao = userDao;
+        this.userDao = userDao;
     }
 
     
@@ -39,25 +40,25 @@ public class CommentDaoJpa extends GenericDaoJpa<Comment> implements CommentDao{
         Comment comment = new Comment();
         comment.setDate(new Date());
         //comment.setPersonId(personId);
-        comment.setCommenter(UserDao.findById(personId));
+        comment.setCommenter(userDao.findById(personId));
         comment.setPostId(postId);
         comment.setText(text);
         //em.persist(comment);
         
         //dropping to native query so the database takes care of race conditions; parameter is safe to pass;
         Post post = postDao.findByPostId(postId);
-        startTransaction();
+        //startTransaction();
         try{
 	        Query q = em.createNativeQuery("UPDATE jschropf_SM_posts SET popularity = (popularity + 1) WHERE id=" + post.getId() + ";");
 	        q.executeUpdate();
 	    } catch (Exception e) {
-	        rollbackTransaction();
+	        //rollbackTransaction();
 	    }
-	    commitTransaction();
+	    //commitTransaction();
         
         Long ownerId = post.getOwnerId();
         Long posterId = post.getPoster().getId();
-        User commenter = UserDao.findById(personId);
+        User commenter = userDao.findById(personId);
         if(ownerId != personId)
             notificationDao.createNotification(commenter.getfName() + " " + commenter.getlName() + " commented on the post on your wall.", "wall", ownerId);
         if(posterId != personId)

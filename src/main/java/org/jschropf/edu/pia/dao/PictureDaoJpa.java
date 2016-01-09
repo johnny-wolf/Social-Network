@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class PictureDaoJpa extends GenericDaoJpa<Picture> implements PictureDao{
 	
-	public PictureDaoJpa(EntityManager em) {
-        super(em, Picture.class);
+	public PictureDaoJpa() {
+        super(Picture.class);
     }
 
     @Override

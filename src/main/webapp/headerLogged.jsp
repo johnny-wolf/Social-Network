@@ -21,7 +21,7 @@
             <div class="collapse navbar-collapse" id="mynavigation">
                 <ul class="nav navbar-nav navbar-right">
                 	<li class="active"><a href="#profile">News Feed</a></li>
-                	<li><a href="/allPeople">Find people</a></li>
+                	<li><a href="/allUsers">Find people</a></li>
                     <li><a href="/friendRequests">Friend Requests</a></li>
                     <li><a href="/notifications">Notifications</a></li>
                     <li><a href="/logout">Log out</a></li>

@@ -11,18 +11,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.jschropf.edu.pia.dao.FriendRequestDao;
-import org.jschropf.edu.pia.manager.FriendRequestManager; 
+import org.jschropf.edu.pia.manager.FriendRequestManager;
+import org.springframework.beans.factory.annotation.Autowired; 
 
-public class AcceptFriendRequest extends HttpServlet{
+@WebServlet(name = "allPeople", urlPatterns = {"/allPeople"}) 
+public class AcceptFriendRequest extends AbstractServlet{
 	private static final long serialVersionUID = 1L;
-    @EJB
-    private FriendRequestDao friendRequestDao;
     
     @EJB
     private FriendRequestManager friendRequestManager;
 
-    public AcceptFriendRequest(FriendRequestDao friendRequestDao, FriendRequestManager friendRequestManager){
-    	this.friendRequestDao = friendRequestDao;
+    @Autowired
+    public AcceptFriendRequest(FriendRequestManager friendRequestManager){
     	this.friendRequestManager = friendRequestManager;
     }
     /** 
@@ -68,8 +68,7 @@ public class AcceptFriendRequest extends HttpServlet{
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
         processRequest(request, response);
     }
 

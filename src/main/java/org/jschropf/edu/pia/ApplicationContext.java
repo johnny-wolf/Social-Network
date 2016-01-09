@@ -61,8 +61,8 @@ public class ApplicationContext {
     private AuthenticationService authenticationService;
 
     public ApplicationContext() {
-        //TODO persistence unit name should be taken from a property file, not hard-coded!
-        em = Persistence.createEntityManagerFactory("org.danekja.edu.pia").createEntityManager();
+        /*//TODO persistence unit name should be taken from a property file, not hard-coded!
+        em = Persistence.createEntityManagerFactory("org.jschropf.edu.pia").createEntityManager();
         userDao = new UserDaoJpa(em);
         notificationDao = new NotificationDaoJpa(em);
         postDao = new PostDaoJpa(em, userDao, notificationDao);
@@ -125,7 +125,7 @@ public class ApplicationContext {
     
     /*public CreatePost getCreatePost(){
     	return createPost;
-    }*/
+    }*//*
 	public PostManager getPostManager() {
 		return postManager;
 	}
@@ -136,5 +136,5 @@ public class ApplicationContext {
 	
 	public FriendRequestManager getFriendRequestManager() {
 		return friendRequestManager;
-	}
+	*/}
 }

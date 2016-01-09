@@ -1,7 +1,8 @@
 package org.jschropf.edu.pia.utils;
-
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+
+import org.springframework.stereotype.Component;
 
 /**
  * Dummy encoder doing literally nothing.
@@ -10,6 +11,7 @@ import java.security.spec.InvalidKeySpecException;
  *
  * @author Jakub Danek
  */
+@Component
 public class PasswordHashEncoder implements Encoder {
 
     @Override
@@ -41,4 +43,4 @@ public class PasswordHashEncoder implements Encoder {
             return false;
         }
     }
-}
+}  

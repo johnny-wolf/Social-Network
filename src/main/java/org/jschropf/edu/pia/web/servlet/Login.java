@@ -2,15 +2,13 @@ package org.jschropf.edu.pia.web.servlet;
 
 import java.io.IOException;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.jschropf.edu.pia.ApplicationContext;
 import org.jschropf.edu.pia.domain.User;
+import org.jschropf.edu.pia.manager.UserManager;
 import org.jschropf.edu.pia.web.auth.AuthenticationService;
 
 /**
@@ -20,22 +18,24 @@ import org.jschropf.edu.pia.web.auth.AuthenticationService;
  *
  * @author Jakub Danek
  */
-public class Login extends HttpServlet {
+public class Login extends AbstractServlet {
 	private static final long serialVersionUID = 1L;
 
     private static final String USERNAME_PARAMETER = "username";
     private static final String PASSWORD_PARAMETER = "password";
-    private static final String OWNER_ID = "ownerId";
+    //private static final String OWNER_ID = "ownerId";
 
     private static final String ERR_ATTRIBUTE = "err";
 
     private AuthenticationService authService;
     
-    private EntityManager em;
+    //private EntityManager em;
+    
+    private UserManager userManager;
 
-    public Login(AuthenticationService authService, EntityManager em) {
+    public Login(AuthenticationService authService, UserManager userManager) {
         this.authService = authService;
-        this.em = em;
+        this.userManager = userManager;
     }
 
     @Override
@@ -52,7 +52,8 @@ public class Login extends HttpServlet {
         }else{
 	        boolean authenticated = authService.authenticate(req.getSession(), username, password);
 	        if(authenticated) {
-	        	User temp = (User)em.createNamedQuery("User.findByUserName", User.class).setParameter("username", username).getSingleResult();
+	        	//User temp = (User)em.createNamedQuery("User.findByUserName", User.class).setParameter("username", username).getSingleResult();
+	        	User temp = userManager.findByUsername(username);
 	        	Long ownerId = temp.getId();
 	        	System.out.println("Login user: "+username+" id: "+ownerId);
 	        	session.setAttribute("userId",ownerId );

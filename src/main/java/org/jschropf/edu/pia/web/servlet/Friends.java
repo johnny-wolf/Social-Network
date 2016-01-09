@@ -13,15 +13,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.jschropf.edu.pia.dao.UserDao;
-import org.jschropf.edu.pia.domain.User; 
+import org.jschropf.edu.pia.domain.User;
+import org.jschropf.edu.pia.manager.UserManager; 
 
-public class Friends extends HttpServlet{
+public class Friends extends AbstractServlet{
 	private static final long serialVersionUID = 1L;
-	 @EJB
-	 private UserDao userDao;
+	 /*@EJB
+	 private UserDao userDao;*/
+	
+	private UserManager userManager;
 
-	 public Friends(UserDao userDao){
-		 this.userDao = userDao;
+	 public Friends(UserManager userManager){
+		 this.userManager = userManager;
+		 //this.userDao = userDao;
 	 }
 	    /** 
 	     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -49,12 +53,12 @@ public class Friends extends HttpServlet{
 		    boolean order = (orderParam == null || !orderParam.equals("DESC"));
 		    String orderBy = request.getParameter("orderBy");
 		    if(orderBy != null && orderBy.equals("dateOfBirth")) {
-			friends = userDao.friendsSortedByDateOfBirth(personId, order);
+			friends = userManager.friendsSortedByDateOfBirth(personId, order);
 		    } else {
-			friends = userDao.friendsSortedByName(personId, order);
+			friends = userManager.friendsSortedByName(personId, order);
 		    }
 
-	            List<User> nonFriends = userDao.nonFriendsFor(personId);
+	            List<User> nonFriends = userManager.nonFriendsFor(personId);
 		    //request.setAttribute("friends", friends);
 		    //request.setAttribute("nonFriends", nonFriends);
 	            // ctx.getRequestDispatcher("/friends.jsp").forward(request, response);

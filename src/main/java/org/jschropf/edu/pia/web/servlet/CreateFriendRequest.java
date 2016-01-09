@@ -14,16 +14,16 @@ import org.jschropf.edu.pia.dao.FriendRequestDao;
 import org.jschropf.edu.pia.domain.FriendRequest;
 import org.jschropf.edu.pia.manager.FriendRequestManager;
 
-public class CreateFriendRequest extends HttpServlet{
+public class CreateFriendRequest extends AbstractServlet{
 	private static final long serialVersionUID = 1L;
-	@EJB
-    private FriendRequestDao friendRequestDao;
+	/*@EJB
+    private FriendRequestDao friendRequestDao;*/
 	
 	@EJB
 	private FriendRequestManager friendRequestManager;
 	
-	public CreateFriendRequest(FriendRequestDao friendRequestDao, FriendRequestManager friendRequestManager){
-		this.friendRequestDao = friendRequestDao;
+	public CreateFriendRequest(FriendRequestManager friendRequestManager){
+		//this.friendRequestDao = friendRequestDao;
 		this.friendRequestManager = friendRequestManager;
 	}
 
@@ -50,9 +50,8 @@ public class CreateFriendRequest extends HttpServlet{
         	System.out.println("retrieving target id: " + request.getParameter("targetId"));
             Long targetId = Long.parseLong(request.getParameter("targetId")); 
             if(personId != targetId){
-            	FriendRequest temp = friendRequestDao.createFriendRequest(personId, targetId);
-            	if (temp != null)
-            		friendRequestManager.releaseFriendRequest(temp);
+            	//FriendRequest temp = friendRequestDao.createFriendRequest(personId, targetId);
+            	friendRequestManager.releaseFriendRequest(personId, targetId);
                 out.println("friend requested");
                 System.out.println("Requesting friendship - Done");
                 response.sendRedirect("/wall?ownerId=" + targetId);
