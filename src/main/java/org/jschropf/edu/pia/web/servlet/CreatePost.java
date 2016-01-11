@@ -1,13 +1,14 @@
 package org.jschropf.edu.pia.web.servlet;
 
-
 import org.jschropf.edu.pia.manager.FriendRequestManager;
 import org.jschropf.edu.pia.manager.PostManager;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -17,7 +18,13 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-//@WebServlet(name = "CreatePost", urlPatterns = {"/createPost"})
+/**
+ * Servlet for handling creation of posts
+ * 
+ * @author Jan Schropfer
+ *
+ */
+@WebServlet("/createPost")
 public class CreatePost extends AbstractServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -25,7 +32,8 @@ public class CreatePost extends AbstractServlet {
 
 	private FriendRequestManager friendRequestManager;
 	
-	public CreatePost(PostManager postManager, FriendRequestManager friendRequestManager){
+	@Autowired
+	public void setCreatePost(PostManager postManager, FriendRequestManager friendRequestManager){
 		this.postManager = postManager;
 		this.friendRequestManager = friendRequestManager;
 	}
@@ -41,12 +49,13 @@ public class CreatePost extends AbstractServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8"); 
-        HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession();
         Long ownerId = (Long)request.getAttribute("wallOwnerId");
-        //System.out.println("searching for user: "+username);
         Long personId = (Long)session.getAttribute("userId");   
+        
         try {
-                FileItemFactory factory = new DiskFileItemFactory();
+                
+        		FileItemFactory factory = new DiskFileItemFactory();
                 ServletFileUpload upload = new ServletFileUpload(factory);
                 
                 List<FileItem> items = upload.parseRequest(request);
@@ -54,16 +63,18 @@ public class CreatePost extends AbstractServlet {
                 for (FileItem i : items) {
 					System.out.println(i.toString());
 				}
+                
                 String title = items.get(0).getString("UTF-8");
                 System.out.println("Loaded title: "+title);
                 String text = items.get(1).getString("UTF-8");
                 System.out.println("Loaded text: "+text);
- 
+                ownerId = Long.parseLong(items.get(2).getString());
                 System.out.println("Loading poster Id: "+items.get(3).getString("UTF-8"));
                 if (items.get(3).getString() != null && !items.get(3).getString("UTF-8").equals("null")) {
                 	System.out.println("Parsing id to long");
-                    ownerId = Long.parseLong(items.get(3).getString("UTF-8"));
-                } else{
+                    personId = Long.parseLong(items.get(3).getString("UTF-8"));
+                } 
+                else{
                 	System.out.println("Poster is owner of the wall");
                     ownerId = personId;
                 }
@@ -73,24 +84,24 @@ public class CreatePost extends AbstractServlet {
                     ownerId = personId;
                 }
 
-        if(null == session.getAttribute("user")) {
-        	System.out.println("No user logged in!");
-            request.setAttribute("ownerId", ownerId);
-        	response.sendRedirect("wall?ownerId=" + ownerId + "&FriendError=noFriend");
-        	return;
-        }        
-		if(!personId.equals(ownerId) && !friendRequestManager.areFriends(personId, ownerId)) {
-			response.sendRedirect("wall?ownerId=" + ownerId + "&FriendError=noFriend");
-		    return;
-		}
+                if(null == session.getAttribute("user")) {
+                	System.out.println("No user logged in!");
+                	request.setAttribute("ownerId", ownerId);
+                	response.sendRedirect("wall?ownerId=" + ownerId + "&FriendError=noFriend");
+                	return;
+                }        
+                if(!personId.equals(ownerId) && !friendRequestManager.areFriends(personId, ownerId)) {
+                	response.sendRedirect("wall?ownerId=" + ownerId + "&FriendError=noFriend");
+                	return;
+                }
             
-			System.out.println("releasing post");
-            postManager.releasePost(personId, title, text, ownerId);
-            response.sendRedirect("wall?ownerId=" + ownerId);
+                System.out.println("releasing post");
+                postManager.releasePost(personId, title, text, ownerId);
+                response.sendRedirect("wall?ownerId=" + ownerId);
             
         } catch (Exception e) {
-            //handle the exception here
             System.out.println("error: "+e);
+            e.printStackTrace();
         }
     }
 
@@ -126,6 +137,6 @@ public class CreatePost extends AbstractServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for handling creation of posts";
     }
 } 

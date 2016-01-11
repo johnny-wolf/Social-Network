@@ -16,16 +16,4 @@ public interface GenericDao<T extends BaseObject> {
     T findOne(Long id);
 
     void remove(T toRemove);
-
-    /*
-        Transaction handling, very crude, there are better ways to do this.
-    
-
-    void startTransaction();
-
-    void commitTransaction();
-
-    void rollbackTransaction();
-    
-    */
 }

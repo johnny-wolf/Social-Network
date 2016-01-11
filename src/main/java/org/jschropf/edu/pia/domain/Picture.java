@@ -11,6 +11,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Picture, not used
+ * 
+ * @author Jan Schropfer
+ *
+ */
 @Entity
 @Table(name = "jschropf_SM_pictures")
 @XmlRootElement
@@ -22,20 +28,11 @@ public class Picture extends BaseObject{
 	
 	@Column(name = "image") 
 	private String image;
-	
-	/*@Column(name = "postId") 
-	private int postId;*/
-	
+
 	public Picture(){
 	}
-	
-	/*public Picture(int postId){
-		this.postId = postId;
-	}*/
 
-	/*
-    ########### MAPPINGS #####################
-     */
+    //Getters and setters
 	
 	public String getImage() {
 		return image;
@@ -44,14 +41,6 @@ public class Picture extends BaseObject{
 	public void setImage(String image) {
 		this.image = image;
 	}
-
-	/*public int getPostId() {
-		return postId;
-	}
-
-	public void setPostId(int postId) {
-		this.postId = postId;
-	}*/
 	
 	@Override
     public String toString() {

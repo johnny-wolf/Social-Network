@@ -21,8 +21,8 @@ public class PictureDaoJpa extends GenericDaoJpa<Picture> implements PictureDao{
         try {
             return q.getSingleResult();
         } catch (NoResultException e) {
-            //no result found, ensuring the behaviour described by interface specification
-            //see javadoc of the findByUsername method.
+
+        	
             return null;
         }
     }

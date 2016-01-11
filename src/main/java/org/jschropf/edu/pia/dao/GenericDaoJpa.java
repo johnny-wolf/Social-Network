@@ -47,19 +47,4 @@ public class GenericDaoJpa<T extends BaseObject> implements GenericDao<T> {
             em.remove(toRemove);
         }
     }
-
-    /*@Override
-    public void startTransaction() {
-        em.getTransaction().begin();
-    }
-
-    @Override
-    public void commitTransaction() {
-        em.getTransaction().commit();
-    }
-
-    @Override
-    public void rollbackTransaction() {
-        em.getTransaction().rollback();
-    }*/
 }

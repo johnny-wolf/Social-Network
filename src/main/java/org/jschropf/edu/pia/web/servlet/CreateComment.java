@@ -15,21 +15,28 @@ import org.jschropf.edu.pia.dao.CommentDao;
 import org.jschropf.edu.pia.domain.Comment;
 import org.jschropf.edu.pia.domain.CommentValidationException;
 import org.jschropf.edu.pia.domain.PostValidationException;
-import org.jschropf.edu.pia.manager.CommentManager; 
+import org.jschropf.edu.pia.manager.CommentManager;
+import org.springframework.beans.factory.annotation.Autowired; 
 
+/**
+ * Servlet for handling of creating comments
+ * 
+ * @author Pavel
+ *
+ */
+@WebServlet("/createComment") 
 public class CreateComment extends AbstractServlet{
 	private static final long serialVersionUID = 1L;
-	/*@EJB
-    private CommentDao commentDao;*/
-	
-	@EJB
+
 	private CommentManager commentManager;
 
-	public CreateComment(CommentManager commentManager){
+	@Autowired
+	public void setCreateComment(CommentManager commentManager){
 		//this.commentDao = commentDao;
 		this.commentManager = commentManager;
 	}
-    /** 
+    
+	/** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
@@ -38,45 +45,28 @@ public class CreateComment extends AbstractServlet{
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ServletContext ctx = getServletConfig().getServletContext();
     	response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8"); 
-        HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession();
         Long personId = (Long)session.getAttribute("userId");
+        
         if(personId == null) {
             response.sendRedirect("login");
             return;
         }
-        PrintWriter out = response.getWriter();
+        
+        String text = request.getParameter("text");
+        Long postId = Long.parseLong(request.getParameter("postId"));
+        Long ownerId = Long.parseLong(request.getParameter("wallOwnerId"));
         try {
-            String text = request.getParameter("text");
-            Long postId = Long.parseLong(request.getParameter("postId"));
-            Long ownerId = Long.parseLong(request.getParameter("wallOwnerId"));
-            //Comment temp = commentDao.createComment(text, personId, postId);
-            try {
-				commentManager.releaseComment(personId, text, postId);
-			} catch (CommentValidationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			commentManager.releaseComment(personId, text, postId);
+		} catch (CommentValidationException e) {
+			e.printStackTrace();
+		}
             
-                response.sendRedirect("comments?postId=" + postId + "&wallOwnerId=" + ownerId);
-            /* TODO output your page here
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CreateCommentServlet</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CreateCommentServlet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-             */
-        } finally {            
-            out.close();
-        }
-    }
+        response.sendRedirect("comments?postId=" + postId + "&wallOwnerId=" + ownerId);
+   }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
      * Handles the HTTP <code>GET</code> method.
      * @param request servlet request
@@ -109,7 +99,7 @@ public class CreateComment extends AbstractServlet{
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        return "Servlet for handling of creating comments";
+    }
 } 
 

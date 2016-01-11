@@ -11,6 +11,12 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Notification
+ * 
+ * @author Jan Schropfer
+ *
+ */
 @Entity
 @Table(name = "jschropf_SM_notifications")
 @XmlRootElement
@@ -23,19 +29,24 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Notification.findByPersonId", query = "SELECT n FROM Notification n WHERE n.personId = :personId")}) 
 public class Notification extends BaseObject{
 
+	//Id of notified person
 	@Column(name = "personId") 
 	private Long personId;
 	
+	//Date when notification was created
 	@Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP) 
 	private Date date;
 	
+	//Text of notification
 	@Column(name = "text") 
 	private String text;
 	
+	//url to event
 	@Column(name = "url") 
 	private String url;
 	
+	//Constructors
 	public Notification(){
 		
 	}
@@ -47,9 +58,7 @@ public class Notification extends BaseObject{
         this.url = url;
     }
 
-	/*
-    ########### MAPPINGS #####################
-     */
+	//Getters and Setters
 	
 	public Long getPersonId() {
 		return personId;

@@ -12,15 +12,20 @@ import org.jschropf.edu.pia.domain.User;
 import org.jschropf.edu.pia.domain.UserValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+/**
+ * Manager for posts
+ * 
+ * @author Jan Schropfer
+ *
+ */
 @Service
 @Transactional
 public class DefaultPostManager implements PostManager{
-	
-	@Autowired
+		
 	private PostDao postDao;
 
-	public DefaultPostManager() {
+	@Autowired
+	public DefaultPostManager(PostDao postDao) {
         this.postDao = postDao;
     }
 	
@@ -29,25 +34,17 @@ public class DefaultPostManager implements PostManager{
 		Post newPost = postDao.createPost(title, text, posterId, ownerId);
 		System.out.println(newPost.toString());
 		System.out.println("Testing post instance if already exists");
+		
 		if(!newPost.isNew()) {
 	        throw new RuntimeException("Post already exists, use save method for updates!");
 		} 
-	        //newPost.validate();
-		System.out.println("Testing post if already exists");    
-	   /* Post existinCheck = postDao.findByPostId(newPost.getId());
-	    if(existinCheck != null) {
-	    	throw new PostValidationException("Post already exists!");
-	    }*/
-	    
-	    System.out.println("Starting Post Transaction");
-	    //postDao.startTransaction();   
+
+	    System.out.println("Releasing post");
         try {
             postDao.save(newPost);
-            //newPost.setPoster(userDao.findById(posterId));
         } catch (Exception e) {
-            //postDao.rollbackTransaction();
+        	e.printStackTrace();
         }
-        //postDao.commitTransaction();
 	}
 	
 	@Override

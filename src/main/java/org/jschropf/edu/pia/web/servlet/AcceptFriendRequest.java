@@ -14,17 +14,23 @@ import org.jschropf.edu.pia.dao.FriendRequestDao;
 import org.jschropf.edu.pia.manager.FriendRequestManager;
 import org.springframework.beans.factory.annotation.Autowired; 
 
-@WebServlet(name = "allPeople", urlPatterns = {"/allPeople"}) 
+/**
+ * Servlet for accepting friend requests
+ * 
+ * @author Jan Schropfer
+ *
+ */
+@WebServlet("/acceptFriendRequest") 
 public class AcceptFriendRequest extends AbstractServlet{
 	private static final long serialVersionUID = 1L;
     
-    @EJB
     private FriendRequestManager friendRequestManager;
 
     @Autowired
-    public AcceptFriendRequest(FriendRequestManager friendRequestManager){
+    public void setAcceptFriendRequest(FriendRequestManager friendRequestManager){
     	this.friendRequestManager = friendRequestManager;
     }
+    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -34,16 +40,18 @@ public class AcceptFriendRequest extends AbstractServlet{
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession(true);
+    	response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
         Long personId = (Long)session.getAttribute("userId");
+        
         try {
             Long sourceId = Long.parseLong(request.getParameter("sourceId")); 
         	friendRequestManager.acceptFriendRequest(sourceId, personId);
             request.setAttribute("wallOwnerId", personId);
-            response.sendRedirect("/wall?ownerId=" + personId);
+            response.sendRedirect("wall?ownerId=" + personId);
                 
-            }catch(Exception e) {            
+            }catch(Exception e) { 
+            	e.printStackTrace();
         }
     }
 
@@ -78,6 +86,6 @@ public class AcceptFriendRequest extends AbstractServlet{
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for accepting friend requests";
     }
 }

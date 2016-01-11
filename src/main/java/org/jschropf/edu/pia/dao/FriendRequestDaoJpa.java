@@ -24,7 +24,7 @@ public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements
         q.setParameter("sourceId", sourceId);
         q.setParameter("targetId", targetId);
         if ((Long) q.getSingleResult() > 0) {
-            return null;
+        	return null;
         }
         //this is not a mistake - cross requesting
         Query q2 = em.createQuery("SELECT COUNT(f) FROM FriendRequest f WHERE f.sourceId=:sourceId AND f.targetId=:targetId AND f.status <> 'DECLINED'");
@@ -35,15 +35,16 @@ public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements
             q3.setParameter("sourceId", targetId);
             q3.setParameter("targetId", sourceId);
             q3.executeUpdate();
+            
             return null;
         }
         FriendRequest friendRequest = new FriendRequest();
         friendRequest.setDate(new Date());
         friendRequest.setSourceId(sourceId);
-        // friendRequest.setSource(personDao.findById(sourceId));
         friendRequest.setTargetId(targetId);
         friendRequest.setStatus("UNANSWERED");
         em.persist(friendRequest);
+        
         return friendRequest;
     }
 	
@@ -53,6 +54,7 @@ public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements
         q.setParameter("sourceId", sourceId);
         q.setParameter("targetId", targetId);
         q.executeUpdate();
+        em.flush();
         
         return true;
     } 
@@ -63,6 +65,8 @@ public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements
         q.setParameter("sourceId", sourceId);
         q.setParameter("targetId", targetId);
         q.executeUpdate();
+        em.flush();
+        
         return true;
     }
     
@@ -74,10 +78,12 @@ public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements
 	    q.setParameter("personId1", personId1);
 	    q.setParameter("personId2", personId2);
 	    if ((Long) q.getSingleResult() > 0) {
-		    return true;
+		    
+	    	return true;
 		    
 	    } else {
-		    return false;
+		   
+	    	return false;
 	    }
     } 
     
@@ -89,10 +95,12 @@ public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements
 	    q.setParameter("personId1", personId1);
 	    q.setParameter("personId2", personId2);
 	    if ((Long) q.getSingleResult() > 0) {
-		    return true;
+		    
+	    	return true;
 		    
 	    } else {
-		    return false;
+		    
+	    	return false;
 	    }
     }
 }

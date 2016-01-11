@@ -5,19 +5,29 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.jschropf.edu.pia.domain.User;
 import org.jschropf.edu.pia.manager.UserManager;
+import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * Servlet for handling all users page. Prepares list of all users
+ * 
+ * @author Jan Schropfer
+ *
+ */
+@WebServlet("/allUsers") 
 public class AllUsers extends AbstractServlet{
 	private static final long serialVersionUID = 1L;
 
 	private UserManager userManager;
 
-	public AllUsers(UserManager userManager){
+	@Autowired
+	public void setAllUsers(UserManager userManager){
 		this.userManager = userManager;
 	}
 	
@@ -32,23 +42,26 @@ public class AllUsers extends AbstractServlet{
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		request.setCharacterEncoding("UTF-8"); 
-		ServletContext ctx = getServletConfig().getServletContext();
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession();
         Long personId = (Long)session.getAttribute("userId");
-		try {
+		
+        try {
 			List<User> people = null;
 			String orderParam = request.getParameter("order");
 			boolean order = (orderParam == null || !orderParam.equals("DESC"));
 			String orderBy = request.getParameter("orderBy");
+			
 			if(orderBy != null && orderBy.equals("dateOfBirth")) {
 				people = userManager.findAllSortedByDateOfBirth(order);
-			} else {
+			} 
+			else {
 				people = userManager.findAllSortedByName(order);
 			}
+			
 			request.setAttribute("allPeople", people);
 			request.setAttribute("wallOwnerId", personId);
-			//response.sendRedirect("/allPeople.jsp");
-			ctx.getRequestDispatcher("/allPeople.jsp").forward(request, response);
+			
+			request.getRequestDispatcher("/allPeople.jsp").forward(request, response);
 		}catch(Exception e){
 			System.out.println("error: "+e);
 	    }
@@ -86,6 +99,6 @@ public class AllUsers extends AbstractServlet{
 	 */
 	@Override
 	public String getServletInfo() {
-		return "Short description";
+		return "Servlet for handling all users page. Prepares list of all users";
 	}
 }

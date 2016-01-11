@@ -43,7 +43,8 @@ public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao{
         } catch (NoResultException e) {
             //no result found, ensuring the behaviour described by interface specification
             //see javadoc of the findByUsername method.
-            return null;
+            
+        	return null;
         }
     }
     
@@ -52,32 +53,19 @@ public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao{
     	Post post = new Post();
         post.setTitle(title);
         post.setText(text);
-        //post.setPosterId(posterId);
-        System.out.println("  Setting poster");
+        System.out.println("Setting poster");
         post.setPoster(userDao.findById(posterId));
-        System.out.println("  Setting poster done: \n"+post.getPoster().toString());
+        System.out.println("Setting poster done: \n"+post.getPoster().toString());
         post.setOwnerId(ownerId);
         post.setDate(new Date());
         post.setPopularity(0);
         System.out.println("Constructing post - done");
-        //em.persist(post);
-        
-        //post = findByAttributes(post.getTitle(), post.getText(), post.getOwnerId(), post.getDate());
-        
-        /*if(picture != null && !picture.equals("")) {
-            // pictureDao.createPicture(picture, post.getId());
-	    Set<Picture> pictures = new HashSet<Picture>();
-	    Picture pictureEntity = new Picture();
-	    pictureEntity.setImage(picture);
-	    pictureEntity.setPost(post);
-	    pictures.add(pictureEntity);
-	    post.setPictures(pictures);
-        }*/
-        //em.persist(post);
         User poster = userDao.findById(posterId);
-        System.out.println("Constructing notification");
+        
+        System.out.println("Constructing notification"); 
         if(notificationDao.createNotification(poster.getfName() + " " + poster.getlName() + " created a new post on your wall.", "wall", ownerId))
         	System.out.println("Constructing notification done");
+        
         return post;
     }
     
@@ -85,11 +73,10 @@ public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao{
     public List<Post> topTenFor(Long personId){
         Query q = em.createQuery("SELECT p FROM Post p WHERE p.ownerId=:personId ORDER BY p.popularity DESC");
         q.setParameter("personId", personId);
-        //how to do a sql limit?
         List<Post> allResults = q.getResultList();
         List<Post> topTen = new ArrayList<Post>();
-        
         int restrict = (allResults.size() < 10) ? allResults.size() : 10;
+        
         for(int i = 0; i < restrict; i++) {
             topTen.add(allResults.get(i));
         }
@@ -100,16 +87,25 @@ public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao{
     @Override
     public void updatePostId(Long posterId, Long postId){
     	Query q = em.createQuery("UPDATE Post SET posterId=:personId WHERE id=:postId");
+    	
+    	try{
+    	em.getTransaction().begin();
     	q.setParameter("personId", posterId);
     	q.setParameter("postId", postId);
     	q.executeUpdate();
-    }
+		}catch(Exception e){
+			em.getTransaction().rollback();
+		}
+		
+    	em.getTransaction().commit();
+	}
     
     @Override
     public Post findByDate(Date date){
     	java.sql.Date sDate = new java.sql.Date(date.getTime());
     	Query q = em.createQuery("SELECT p FROM Post p WHERE p.date=:postDate", Post.class);
     	q.setParameter("postDate", sDate);
+    	
     	return (Post)q.getSingleResult();
     }
     
@@ -118,12 +114,14 @@ public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao{
     	Query q = em.createQuery("SELECT p FROM Post p WHERE p.text=:postText AND p.title=:postTitle");
     	q.setParameter("postText", text);
     	q.setParameter("postTitle", title);
+    	
     	return (Post)q.getSingleResult();
     }
     
     public List<Post> wallFor(Long personId){
         Query q = em.createQuery("SELECT p FROM Post p WHERE p.ownerId=:personId ORDER BY p.date DESC");
         q.setParameter("personId", personId);
+        
         return q.getResultList();
     } 
 

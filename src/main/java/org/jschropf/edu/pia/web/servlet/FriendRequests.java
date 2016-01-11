@@ -14,14 +14,23 @@ import javax.servlet.http.HttpSession;
 
 import org.jschropf.edu.pia.dao.UserDao;
 import org.jschropf.edu.pia.domain.User;
-import org.jschropf.edu.pia.manager.UserManager; 
+import org.jschropf.edu.pia.manager.UserManager;
+import org.springframework.beans.factory.annotation.Autowired; 
 
+/**
+ * Servlet for preparing list of users who requested friendship for friendrequests.jsp
+ * 
+ * @author Jan Schropfer
+ *
+ */
+@WebServlet("/friendRequests") 
 public class FriendRequests extends AbstractServlet{
 	private static final long serialVersionUID = 1L;
-	@EJB
+
     private UserManager userManager;
 	
-	public FriendRequests(UserManager userManager){
+    @Autowired
+	public void setFriendRequests(UserManager userManager){
 		this.userManager = userManager;
 	}
 	
@@ -35,28 +44,16 @@ public class FriendRequests extends AbstractServlet{
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        ServletContext ctx = getServletConfig().getServletContext();
-        HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession();
         Long personId = (Long)session.getAttribute("userId");
-        PrintWriter out = response.getWriter();
-        try {            
-            List<User> unansweredFriendRequests = userManager.unansweredFriendRequestsFor(personId);
-	    request.setAttribute("friendRequests", unansweredFriendRequests);
-	    ctx.getRequestDispatcher("/friendRequests.jsp").forward(request, response);
+           
+        List<User> unansweredFriendRequests = userManager.unansweredFriendRequestsFor(personId);
+	    
+        request.setAttribute("wallOwnerId", personId);
+        request.setAttribute("friendRequests", unansweredFriendRequests);
+	    request.getRequestDispatcher("/friendRequests.jsp").forward(request, response);
+	    
 	    return;
-            /* TODO output your page here
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet UnansweredFriendRequestServlet</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet UnansweredFriendRequestServlet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-             */
-        } finally {            
-            out.close();
-        }
     }
 
     /** 
@@ -91,7 +88,7 @@ public class FriendRequests extends AbstractServlet{
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for preparing list of users who requested friendship for friendrequests.jsp";
     }
 } 
 

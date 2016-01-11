@@ -15,6 +15,12 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Comment
+ * 
+ * @author Jan Schropfer
+ *
+ */
 @Entity
 @Table(name = "jschropf_SM_comments")
 @XmlRootElement
@@ -23,27 +29,27 @@ import org.apache.commons.lang3.StringUtils;
     @NamedQuery(name = "Comment.findById", query = "SELECT c FROM Comment c WHERE c.id = :id"),
     @NamedQuery(name = "Comment.findByText", query = "SELECT c FROM Comment c WHERE c.text = :text"),
     @NamedQuery(name = "Comment.findByDate", query = "SELECT c FROM Comment c WHERE c.date = :date"),
-    //@NamedQuery(name = "Comment.findByPersonId", query = "SELECT c FROM Comment c WHERE c.personId = :personId"),
     @NamedQuery(name = "Comment.findByPostId", query = "SELECT c FROM Comment c WHERE c.postId = :postId")}) 
 public class Comment extends BaseObject{
 
+	//Post id
 	@Column(name = "postId") 
 	private long postId;
 	
+	// Date of posting
 	@Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP) 
 	private Date date;
 	
+	//comment text
 	@Column(name = "text") 
 	private String text;
 	
+	//Constructor
 	public Comment() {
     }
 	
-	/*
-    ########### MAPPINGS #####################
-     */
-	
+	// Getters and Setters
 	public long getPostId() {
 		return postId;
 	}
@@ -77,7 +83,6 @@ public class Comment extends BaseObject{
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Comment)) {
             return false;
         }
@@ -98,6 +103,7 @@ public class Comment extends BaseObject{
         return sb.toString();
     }
 	
+	//foreign key person id
 	@ManyToOne
 	@JoinColumn (name="personId")
 	private User commenter;

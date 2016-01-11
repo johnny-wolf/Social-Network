@@ -12,31 +12,41 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Friend Request
+ * 
+ * @author Jan Schropfer
+ *
+ */
 @Entity
 @Table(name = "jschropf_SM_friendRequests") 
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "FriendRequest.findAll", query = "SELECT f FROM FriendRequest f"),
     @NamedQuery(name = "FriendRequest.findById", query = "SELECT f FROM FriendRequest f WHERE f.id = :id"),
-    //@NamedQuery(name = "FriendRequest.findByStatus", query = "SELECT f FROM FriendRequest f WHERE f.status = :status"),
     @NamedQuery(name = "FriendRequest.findByDate", query = "SELECT f FROM FriendRequest f WHERE f.date = :date"),
     @NamedQuery(name = "FriendRequest.findBySourceId", query = "SELECT f FROM FriendRequest f WHERE f.sourceId = :sourceId"),
     @NamedQuery(name = "FriendRequest.findByTargetId", query = "SELECT f FROM FriendRequest f WHERE f.targetId = :targetId")}) 
 public class FriendRequest extends BaseObject{
 
+	// Id of person who requested friendship
 	@Column(name = "sourceId")
 	private long sourceId;
 	
+	//Id of targeted person
 	@Column(name = "targetId") 
 	private long targetId;
 	
+	//Date of sending the request
 	@Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP) 
 	private Date date;
 	
+	//Status of request
 	@Column(name = "status") 
 	private String status;
 	
+	//Constructors
 	public FriendRequest(){
 	}
 	
@@ -46,10 +56,7 @@ public class FriendRequest extends BaseObject{
 	}
 
 
-	/*
-    ########### MAPPINGS #####################
-     */
-	
+	//Getters and Setters	
 	public long getSourceId() {
 		return sourceId;
 	}

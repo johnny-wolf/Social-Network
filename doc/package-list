@@ -1,0 +1,8 @@
+org.jschropf.edu.pia.dao
+org.jschropf.edu.pia.domain
+org.jschropf.edu.pia.manager
+org.jschropf.edu.pia.utils
+org.jschropf.edu.pia.web.auth
+org.jschropf.edu.pia.web.filter
+org.jschropf.edu.pia.web.listener
+org.jschropf.edu.pia.web.servlet

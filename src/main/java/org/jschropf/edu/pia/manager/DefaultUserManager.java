@@ -1,5 +1,6 @@
 package org.jschropf.edu.pia.manager;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -45,21 +46,34 @@ public class DefaultUserManager implements UserManager {
         }
 
         newUser.validate();
-
         User existinCheck = userDao.findByUsername(newUser.getUsername());
+        
         if(existinCheck != null) {
             throw new UserValidationException("Username already taken!");
         }
 
         newUser.setPassword(encoder.encode(newUser.getPassword()));
 
-        //userDao.startTransaction();
+        System.out.println("Saving user");
         try {
             userDao.save(newUser);
         } catch (Exception e) {
-            //userDao.rollbackTransaction();
+            e.printStackTrace();
+            System.out.println("Error while saving user");
         }
-       //userDao.commitTransaction();
+        System.out.println("User saved");
+    }
+    
+    @Override
+    public void updatePassword(String password, User user){
+    	String pass = encoder.encode(password);
+    	System.out.println("encoded password: "+pass);
+    	
+    	try {
+            userDao.updatePassword(user.getId(), pass);
+        } catch (Exception e) {
+            System.out.println("Couldn't update password");
+        }
     }
     
     @Override
@@ -76,6 +90,7 @@ public class DefaultUserManager implements UserManager {
     public long userIdFinder(String username){
     	User u = userDao.findByUsername(username);
     	System.out.println(u);
+    	
     	return u.getId();
     }
     
@@ -83,6 +98,7 @@ public class DefaultUserManager implements UserManager {
     public List<User> findAllSortedByDateOfBirth(boolean order){
     	List<User> u = userDao.findAllSortedByDateOfBirth(order);
     	System.out.println(u);
+    	
     	return u;
     }
     
@@ -90,36 +106,59 @@ public class DefaultUserManager implements UserManager {
     public List<User> findAllSortedByName(boolean order){
     	List<User> u = userDao.findAllSortedByName(order);
     	System.out.println(u);
+    	
     	return u;
     }
     
     @Override
     public User findByUsername(String username){
     	User user = userDao.findByUsername(username);
+    	
     	return user;
     }
     
     @Override
     public List<User> friendsSortedByDateOfBirth(Long personId, boolean order){
     	List<User> friends = userDao.friendsSortedByDateOfBirth(personId, order);
+    	
     	return friends;
     }
     
     @Override
     public List <User> friendsSortedByName(Long personId, boolean order){
     	List<User> friends = userDao.friendsSortedByName(personId, order);
+    	
     	return friends;
     }
     
     @Override
     public List<User> nonFriendsFor(Long personId){
     	List<User> nonFriends = userDao.nonFriendsFor(personId);
+    	
     	return nonFriends;
     }
     
     @Override
     public List<User> unansweredFriendRequestsFor(Long personId){
     	List<User> unanswered = userDao.unansweredFriendRequestsFor(personId);
+    	
     	return unanswered;
+    }
+    
+    @Override
+    public boolean updatePersonalInformation(Long personId, String firstName, String lastName, String dayOfBirth, String monthOfBirth, String yearOfBirth){
+    	
+    	return(userDao.updatePersonalInformation(personId, firstName, lastName, dayOfBirth, monthOfBirth, yearOfBirth));
+    }
+    
+    @Override
+    public boolean updatePersonalInformation(Long personId, String firstName, String lastName, Date date){
+    	
+    	return(userDao.updatePersonalInformation(personId, firstName, lastName, date));
+    }
+    
+    @Override
+    public User findById(Long personId){
+    	return userDao.findById(personId);
     }
 }

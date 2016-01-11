@@ -15,7 +15,6 @@
     <context:component-scan base-package="org.jschropf.edu.pia.**.*"/>
     <tx:annotation-driven transaction-manager="transactionManager" />
 
-
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" destroy-method="destroy">
         <property name="persistenceXmlLocation" value="classpath:/META-INF/persistence.xml"/>
         <property name="jpaVendorAdapter" ref="hibernateVendorAdapter"/>

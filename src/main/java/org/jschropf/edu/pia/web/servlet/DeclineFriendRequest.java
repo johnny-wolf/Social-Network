@@ -11,18 +11,27 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.jschropf.edu.pia.dao.FriendRequestDao;
-import org.jschropf.edu.pia.manager.FriendRequestManager; 
+import org.jschropf.edu.pia.manager.FriendRequestManager;
+import org.springframework.beans.factory.annotation.Autowired; 
 
+/**
+ * Servlet for handling friend request decline
+ * 
+ * @author Jan Schropfer
+ *
+ */
+@WebServlet("/declineFriendRequest") 
 public class DeclineFriendRequest extends AbstractServlet{
 	private static final long serialVersionUID = 1L;
 
-	@EJB
 	private FriendRequestManager friendRequestManager;
 
-	public DeclineFriendRequest(FriendRequestManager friendRequestManager){
+	@Autowired
+	public void setDeclineFriendRequest(FriendRequestManager friendRequestManager){
 		this.friendRequestManager = friendRequestManager;
 	}
-    /** 
+    
+	/** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
@@ -32,19 +41,19 @@ public class DeclineFriendRequest extends AbstractServlet{
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession();
         Long personId = (Long)session.getAttribute("userId");
+        
         try {
             Long sourceId = Long.parseLong(request.getParameter("sourceId"));
             friendRequestManager.declineFriendRequest(sourceId, personId);
             request.setAttribute("wallOwnerId", personId);
-            response.sendRedirect("/wall?ownerId=" + personId);
+            response.sendRedirect("wall?ownerId=" + personId);
         }catch(Exception e){
         	System.out.println(e);
         }
-        }
+    }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
      * Handles the HTTP <code>GET</code> method.
      * @param request servlet request
@@ -77,6 +86,6 @@ public class DeclineFriendRequest extends AbstractServlet{
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold> 
+        return "Servlet for handling friend request decline";
+    }
 }

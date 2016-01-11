@@ -22,7 +22,9 @@ import org.jschropf.edu.pia.web.servlet.FriendRequests;
 import org.jschropf.edu.pia.web.servlet.Friends;
 import org.jschropf.edu.pia.web.servlet.Login;
 import org.jschropf.edu.pia.web.servlet.Logout;
+import org.jschropf.edu.pia.web.servlet.ProfileEdit;
 import org.jschropf.edu.pia.web.servlet.Register;
+import org.jschropf.edu.pia.web.servlet.UserProfile;
 import org.jschropf.edu.pia.web.servlet.Wall;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -46,10 +48,10 @@ public class ApplicationStartListener implements ServletContextListener {
     	ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(sce.getServletContext());
     	AuthenticationService auth = ctx.getBean(AuthenticationService.class); 
     	
-    	sce.getServletContext().addServlet("login", new Login(auth, ctx.getBean(UserManager.class))).addMapping("/login");
+    	/*sce.getServletContext().addServlet("login", new Login()).addMapping("/login");
         sce.getServletContext().addServlet("logout", new Logout()).addMapping("/logout");
         sce.getServletContext().addServlet("register", new Register(ctx.getBean(UserManager.class))).addMapping("/register");
-        sce.getServletContext().addServlet("wall", new Wall(ctx.getBean(PostManager.class), ctx.getBean(UserManager.class))).addMapping("/wall");
+        //sce.getServletContext().addServlet("wall", new Wall(ctx.getBean(PostManager.class), ctx.getBean(UserManager.class))).addMapping("/wall");
         sce.getServletContext().addServlet("createPost", new CreatePost(ctx.getBean(PostManager.class), ctx.getBean(FriendRequestManager.class))).addMapping("/createPost");
         sce.getServletContext().addServlet("createComment", new CreateComment(ctx.getBean(CommentManager.class))).addMapping("/createComment");
         sce.getServletContext().addServlet("comments", new Comments(ctx.getBean(CommentManager.class))).addMapping("/comments");
@@ -59,6 +61,9 @@ public class ApplicationStartListener implements ServletContextListener {
         sce.getServletContext().addServlet("friends", new Friends(ctx.getBean(UserManager.class))).addMapping("/friends");
         sce.getServletContext().addServlet("declineFriendRequest", new DeclineFriendRequest(ctx.getBean(FriendRequestManager.class))).addMapping("/declineFriendRequest");
         sce.getServletContext().addServlet("allUsers", new AllUsers(ctx.getBean(UserManager.class))).addMapping("/allUsers");
+        sce.getServletContext().addServlet("userProfile", new UserProfile(ctx.getBean(UserManager.class))).addMapping("/userProfile");
+        sce.getServletContext().addServlet("editProfile", new ProfileEdit(ctx.getBean(UserManager.class))).addMapping("/editProfile");*/
+
         
         sce.getServletContext().addFilter("authFilter", new AuthenticationGuard(auth)).addMappingForUrlPatterns(null, false, "/secret/*");
     }

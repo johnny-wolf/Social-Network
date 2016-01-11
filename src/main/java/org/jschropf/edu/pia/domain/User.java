@@ -38,26 +38,39 @@ public class User extends BaseObject {
      */
 	@Column(name = "username")
     private String username;
-    /**
-     * Secret for signing-in
-     */
+	/**
+	 * password
+	 */
     @Column(name = "password") 
     private String password;
 
+    /**
+     * first name
+     */
     @Column(name = "firstName") 
     private String fName;
     
+    /**
+     * last name
+     */
     @Column(name = "lastName") 
     private String lName;
     
+    /**
+     * picture
+     */
     @Column(name = "picture")
     private String picture; 
     
+    /**
+     * birthdate
+     */
     @Column(name = "birthDate")
     @Temporal(TemporalType.TIMESTAMP) 
 	private Date birthDate;
 
-    public User() {
+    //Constructors
+	public User() {
     }
     
     public User(String username, String password, String fName, String lName, Date birthDate){
@@ -73,10 +86,6 @@ public class User extends BaseObject {
         this.password = password;
     }
 
-    /*
-    ########### API ##################
-     */
-
     /**
      * Validates that user instance is currently in a valid state.
      * @throws UserValidationException in case the instance is not in valid state.
@@ -86,9 +95,7 @@ public class User extends BaseObject {
         if(StringUtils.isBlank(password)) throw new UserValidationException("Password is a required field");
     }
 
-    /*
-    ########### MAPPINGS #####################
-     */
+    //Getters and Setters
 
     @Column(unique = true)
     public String getUsername() {
@@ -129,6 +136,14 @@ public class User extends BaseObject {
 
 	public void setPicture(String picture) {
 		this.picture = picture;
+	}
+	
+    public Date getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
 	}
 
 	@Override

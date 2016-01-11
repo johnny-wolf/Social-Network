@@ -8,75 +8,79 @@ import org.jschropf.edu.pia.domain.FriendRequestValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Manager for Friend requests
+ * 
+ * @author Jan Schropfer
+ *
+ */
 @Service
 @Transactional
 public class DefaultFriendRequestManager implements FriendRequestManager{
-	@Autowired
+	
 	private FriendRequestDao friendRequestDao;
 	
-	public DefaultFriendRequestManager(){
+	@Autowired
+	public DefaultFriendRequestManager(FriendRequestDao friendRequestDao){
 		this.friendRequestDao = friendRequestDao;
 	}
 
 	@Override
 	public void releaseFriendRequest(Long personId, Long targetId) throws FriendRequestValidationException {
+		System.out.println("Trying to create new friend request");
 		FriendRequest newRequest = friendRequestDao.createFriendRequest(personId, targetId);
 		System.out.println(newRequest.toString());
 		System.out.println("Testing Friend Request instance if already exists");
+		
 		if(!newRequest.isNew()) {
-	        throw new RuntimeException("FriendRequest already exists, use save method for updates!");
+	        System.out.println("FriendRequest already exists, use save method for updates!");
+	        return;
 		} 
-	        //newPost.validate();
-		System.out.println("Testing Friend Request if already exists");    
-	   /* Post existinCheck = postDao.findByPostId(newPost.getId());
-	    if(existinCheck != null) {
-	    	throw new PostValidationException("Post already exists!");
-	    }*/
-	    
-	    System.out.println("Starting Friend Request Transaction");
-	    //friendRequestDao.startTransaction();   
+
+		System.out.println("Saving friend request");
         try {
         	friendRequestDao.save(newRequest);
-            //newPost.setPoster(userDao.findById(posterId));
         } catch (Exception e) {
-        	//friendRequestDao.rollbackTransaction();
+        	System.out.println("Error while saving friend request!");
+        	e.printStackTrace();
         }
-        //friendRequestDao.commitTransaction();
-        System.out.println("Friend Request Transaction Complete");
+        
+        System.out.println("Friend Request saved");
 	}
 	
 	@Override
 	public void acceptFriendRequest(Long sourceId, Long targetId){
 		System.out.println("Starting Friend Request Transaction");
-		//friendRequestDao.startTransaction();
+
 		try {
         	friendRequestDao.acceptFriendRequest(sourceId, targetId);
-            //newPost.setPoster(userDao.findById(posterId));
         } catch (Exception e) {
-        	//friendRequestDao.rollbackTransaction();
         	System.out.println(e);
         }
-        //friendRequestDao.commitTransaction();
-        System.out.println("Friend Request Transaction Complete");
+		
+        System.out.println("Friend Request accepted");
 	}
 	
 	@Override
 	public void declineFriendRequest(Long sourceId, Long targetId){
 		System.out.println("Starting Friend Request Transaction");
-		//friendRequestDao.startTransaction();
+
 		try {
         	friendRequestDao.declineFriendRequest(sourceId, targetId);
-            //newPost.setPoster(userDao.findById(posterId));
         } catch (Exception e) {
-        	//friendRequestDao.rollbackTransaction();
         	System.out.println(e);
         }
-        //friendRequestDao.commitTransaction();
-        System.out.println("Friend Request Transaction Complete");
+
+		System.out.println("Friend Request Declined");
 	}
 	
 	@Override
 	public boolean areFriends(Long sourceId, Long targetId){
 		return friendRequestDao.areFriends(sourceId, targetId);
+	}
+	
+	@Override
+	public boolean areUnanswered(Long personId1, Long personId2){
+		return friendRequestDao.areUnanswered(personId1, personId2);
 	}
 }

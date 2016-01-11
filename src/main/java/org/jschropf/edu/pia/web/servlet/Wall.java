@@ -18,21 +18,25 @@ import org.jschropf.edu.pia.domain.Comment;
 import org.jschropf.edu.pia.domain.Post;
 import org.jschropf.edu.pia.domain.User;
 import org.jschropf.edu.pia.manager.PostManager;
-import org.jschropf.edu.pia.manager.UserManager; 
+import org.jschropf.edu.pia.manager.UserManager;
+import org.springframework.beans.factory.annotation.Autowired; 
 
-//@WebServlet(name = "Wall", urlPatterns = {"/wall"}) 
+/**
+ * Servlet for preparing information for user wall
+ * 
+ * @author Jan Schropfer
+ *
+ */
+@WebServlet("/wall") 
 public class Wall extends AbstractServlet {
 	private static final long serialVersionUID = 1L;
 
-	@EJB
 	private PostManager postManager;
-    //private PostDao postDao;
-	
-	@EJB
+
 	private UserManager userManager;
-	//private UserDao userDao; 
 	
-	public Wall(PostManager postManager, UserManager userManager){
+	@Autowired
+	public void setManagers(PostManager postManager, UserManager userManager){
 		this.postManager = postManager;
 		this.userManager = userManager;
 	}
@@ -46,39 +50,49 @@ public class Wall extends AbstractServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ServletContext ctx = getServletConfig().getServletContext();
     	response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8"); 
-        HttpSession session = request.getSession(true);
-        Long personId = (Long)session.getAttribute("userId");
+        HttpSession session = request.getSession();
+        Long personId = (Long)request.getSession().getAttribute("userId");
         Long commentLoaded = (Long)request.getAttribute("commentLoaded");
+        
         List<Comment> comments = (List<Comment>) request.getAttribute("comments");
+        
+    	if(userManager.findById(Long.parseLong(request.getParameter("ownerId"))) == null || personId == null){
+    		request.setAttribute("err", "User of specified wall doesn't exist");
+    		request.getRequestDispatcher("/index.jsp").forward(request, response);
+    		return;
+    	}
+        
         if(comments != null)
         	System.out.println("Comments for post on wall loaded");
+        
         Long postId = (Long) request.getAttribute("commentActive");
+        
         if(postId != null)
         	System.out.println("Post with comments on the wall identified: "+postId);
-//        if(personId == null) {
-//            response.sendRedirect("login");
-//            return;
-//        }
 
         Long ownerId = personId;
+        
         if (request.getParameter("ownerId") != null) {
             ownerId = Long.parseLong(request.getParameter("ownerId"));
         }
+
         List<Post> posts = null;
-	if(request.getParameter("filter") != null && request.getParameter("filter").equals("popular")){	
-		System.out.println("Writing top ten on wall");
-		posts = postManager.topTenFor(ownerId);
-	} else {
-		System.out.println("Writing all on wall");
-		posts = postManager.wallFor(ownerId);
-	}
+        
+        if(request.getParameter("filter") != null && request.getParameter("filter").equals("popular")){	
+        	System.out.println("Writing top ten on wall");
+        	posts = postManager.topTenFor(ownerId);
+        } 
+        else {
+        	System.out.println("Writing all on wall");
+        	posts = postManager.wallFor(ownerId);
+        }
+        
         request.setAttribute("posts", posts);
-	// sending this so we can use it in links
         request.setAttribute("wallOwnerId", ownerId);
     	request.setAttribute("comments", comments);
+    	
     	if(request.getParameter("FriendError") != null){	
     		System.out.println("Not Friend of owner " + ownerId);
     		request.setAttribute("FriendError", request.getAttribute("FriendError"));
@@ -88,16 +102,18 @@ public class Wall extends AbstractServlet {
 	    String orderParam = request.getParameter("order");
 	    boolean order = (orderParam == null || !orderParam.equals("DESC"));
 	    String orderBy = request.getParameter("orderBy");
-	    if(orderBy != null && orderBy.equals("dateOfBirth")) {
-		friends = userManager.friendsSortedByDateOfBirth(personId, order);
-	    } else {
-		friends = userManager.friendsSortedByName(personId, order);
-	    }
-	    List<User> nonFriends = userManager.nonFriendsFor(personId);
 	    
+	    if(orderBy != null && orderBy.equals("dateOfBirth")) {
+	    	friends = userManager.friendsSortedByDateOfBirth(personId, order);
+	    } 
+	    else {
+	    	friends = userManager.friendsSortedByName(personId, order);
+	    }
+	    
+	    List<User> nonFriends = userManager.nonFriendsFor(personId);
 	    request.setAttribute("people", friends);
 	    
-    	ctx.getRequestDispatcher("/Wall.jsp").forward(request, response);
+    	request.getRequestDispatcher("/Wall.jsp").forward(request, response);
     }
 
     /** 
@@ -132,6 +148,6 @@ public class Wall extends AbstractServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for preparing information for user wall";
     }
 }

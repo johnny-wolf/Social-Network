@@ -2,9 +2,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>cz.kiv.zcu.pia</groupId>
-    <artifactId>semestralka</artifactId>
+    <artifactId>jschropf</artifactId>
     <packaging>war</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1</version>
     <name>KIV/PIA Labs Example Application Project - Spring implementation</name>
     <url>https://courseware.zcu.cz/portal/studium/courseware/kiv/pia</url>
 

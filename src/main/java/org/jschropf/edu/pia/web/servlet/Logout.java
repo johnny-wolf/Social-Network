@@ -9,8 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession; 
 
+/**
+ * Servlet handling logging out
+ * 
+ * @author Jan Schropfer
+ *
+ */
+@WebServlet("/logout") 
 public class Logout extends AbstractServlet{
 	private static final long serialVersionUID = 1L;
+	
 	/** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -21,13 +29,17 @@ public class Logout extends AbstractServlet{
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession();
+        
         session.removeAttribute("ownerId");
         session.removeAttribute("userId");
         session.removeAttribute("user");
+        session.invalidate();
+        
         request.setAttribute("err", "You have been successfully loged out");
         response.sendRedirect("/index.jsp");
     }
+    
     /** 
      * Handles the HTTP <code>GET</code> method.
      * @param request servlet request
@@ -60,6 +72,6 @@ public class Logout extends AbstractServlet{
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet handling logging out";
     }
 }

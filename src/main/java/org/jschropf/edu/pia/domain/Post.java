@@ -23,6 +23,12 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Post
+ * 
+ * @author Jan Schropfer
+ *
+ */
 @Entity
 @Table(name = "jschropf_SM_posts")
 @XmlRootElement
@@ -32,29 +38,37 @@ import org.apache.commons.lang3.StringUtils;
     @NamedQuery(name = "Post.findByTitle", query = "SELECT p FROM Post p WHERE p.title = :title"),
     @NamedQuery(name = "Post.findByDate", query = "SELECT p FROM Post p WHERE p.date = :date"),
     @NamedQuery(name = "Post.findByText", query = "SELECT p FROM Post p WHERE p.text = :text"),
-    //@NamedQuery(name = "Post.findByPosterId", query = "SELECT p FROM Post p WHERE p.posterId = :posterId"),
     @NamedQuery(name = "Post.findByOwnerId", query = "SELECT p FROM Post p WHERE p.ownerId = :ownerId"),
     @NamedQuery(name = "Post.findByPopularity", query = "SELECT p FROM Post p WHERE p.popularity = :popularity")
 }) 
 public class Post extends BaseObject{
 	
+	//Post release date
 	@Column(name = "date")
     @Temporal(TemporalType.TIMESTAMP) 
 	private Date date;
 	
+	//Post text
     @Column(name = "text") 
 	private String text;
     
+    //Post title
     @Column(name = "title")
 	private String title;
     
+    //Id of post owner
     @Basic(optional = false)
 	private long ownerId;
     
+    //Number of comments on post
     @Column(name = "popularity") 
 	private int popularity;
 
-    public Post(){}
+    //Constructors
+    public Post(){
+    	
+    }
+    
 	public Post(String title,String text, Long posterId, Long ownerId, int popularity, Date date) {
 		this.date = date;
 		this.ownerId = ownerId;
@@ -66,9 +80,7 @@ public class Post extends BaseObject{
 		this(title, text, posterId, ownerId, 0, new Date()); 
 	}
 	
-	/*
-    ########### MAPPINGS #####################
-     */
+	//Getters and Setters
 	
 	public Date getDate() {
 		return date;
@@ -127,19 +139,8 @@ public class Post extends BaseObject{
         return sb.toString();
     }
 	
-	/*@OneToMany (targetEntity=Picture.class, mappedBy="post", cascade=CascadeType.PERSIST)
-    private Set<Picture> pictures = new HashSet<Picture>();
-
-    public Set<Picture> getPictures() {
-    	
-	  return pictures;
-    }
-
-    public void setPictures(Set<Picture> pictures) {
-    	
-	   this.pictures = pictures;
-    }*/
 	
+	//Foreign key poster id. poster instance
     @ManyToOne
     @JoinColumn (name="posterId")
     private User poster;

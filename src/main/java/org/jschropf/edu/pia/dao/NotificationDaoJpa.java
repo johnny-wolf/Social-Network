@@ -24,8 +24,7 @@ public class NotificationDaoJpa extends GenericDaoJpa<Notification> implements N
         try {
             return q.getSingleResult();
         } catch (NoResultException e) {
-            //no result found, ensuring the behaviour described by interface specification
-            //see javadoc of the findByUsername method.
+ 
             return null;
         }
     } 
@@ -39,13 +38,14 @@ public class NotificationDaoJpa extends GenericDaoJpa<Notification> implements N
         notification.setPersonId(personId);
         System.out.println("Creating Notification - Setting parameters - Done");
         em.persist(notification);
+        
         return true;
     }
 
     public List<Notification> notificationsFor(long personId) {
         Query q = em.createQuery("SELECT n FROM Notification n WHERE n.personId=:personId ORDER BY n.date DESC");
         q.setParameter("personId", personId);
+        
         return q.getResultList();
-
     } 
 }

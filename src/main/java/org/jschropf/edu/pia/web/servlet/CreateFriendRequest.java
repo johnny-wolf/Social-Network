@@ -13,16 +13,22 @@ import javax.servlet.http.HttpSession;
 import org.jschropf.edu.pia.dao.FriendRequestDao;
 import org.jschropf.edu.pia.domain.FriendRequest;
 import org.jschropf.edu.pia.manager.FriendRequestManager;
+import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * Servlet for handling creation of friend request
+ * 
+ * @author Jan Schropfer
+ *
+ */
+@WebServlet("/friendRequest") 
 public class CreateFriendRequest extends AbstractServlet{
 	private static final long serialVersionUID = 1L;
-	/*@EJB
-    private FriendRequestDao friendRequestDao;*/
-	
-	@EJB
+
 	private FriendRequestManager friendRequestManager;
 	
-	public CreateFriendRequest(FriendRequestManager friendRequestManager){
+	@Autowired
+	public void setCreateFriendRequest(FriendRequestManager friendRequestManager){
 		//this.friendRequestDao = friendRequestDao;
 		this.friendRequestManager = friendRequestManager;
 	}
@@ -36,36 +42,36 @@ public class CreateFriendRequest extends AbstractServlet{
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	System.out.println("Requesting friendship - Starting");
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8"); 
-        HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession();
         Long personId = (Long)session.getAttribute("userId");
-        PrintWriter out = response.getWriter();
+        
         try {
+        	
         	if(personId == null){
         		request.setAttribute("err", "To add friend, you must be logged in!");
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
         	}
-        	System.out.println("retrieving target id: " + request.getParameter("targetId"));
-            Long targetId = Long.parseLong(request.getParameter("targetId")); 
-            if(personId != targetId){
-            	//FriendRequest temp = friendRequestDao.createFriendRequest(personId, targetId);
+        	
+        	Long targetId = Long.parseLong(request.getParameter("targetId").trim());
+        	System.out.println("retrieving target id: " + targetId + " and user id: " + personId);
+             
+            
+            if(!friendRequestManager.areUnanswered(personId, targetId)){
+            	System.out.println("Requesting friendship - Starting");
             	friendRequestManager.releaseFriendRequest(personId, targetId);
-                out.println("friend requested");
                 System.out.println("Requesting friendship - Done");
-                response.sendRedirect("/wall?ownerId=" + targetId);
-            }else {
-                out.println("friend request failed. you already requested this person or you do not have rights to request this person.");
-                request.setAttribute("err", "friend request failed. you already requested this person or you do not have rights to request this person.");
-                response.sendRedirect("/wall?ownerId=" + targetId);
+                request.getRequestDispatcher("wall?ownerId="+targetId).forward(request, response);
             }
+            else {
+                request.setAttribute("err", "friend request failed. you already requested this person or you do not have rights to request this person.");
+                request.getRequestDispatcher("wall?ownerId="+targetId).forward(request, response);
+            }
+            
         }catch(Exception e){ 
         	System.out.println("Exception " + e);
-        }
-        
-        finally {            
-            out.close();
+        	e.printStackTrace();
         }
     }
 
@@ -101,6 +107,6 @@ public class CreateFriendRequest extends AbstractServlet{
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for handling creation of friend request";
     }
 }

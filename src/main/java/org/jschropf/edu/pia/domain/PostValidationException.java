@@ -5,7 +5,7 @@ package org.jschropf.edu.pia.domain;
  *
  * Date: 26.11.15
  *
- * @author Jakub Danek
+ * @author Jan Schropfer
  */
 public class PostValidationException extends Exception {
 
