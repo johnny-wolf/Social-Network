@@ -15,16 +15,18 @@ public interface FriendRequestDao extends GenericDao<FriendRequest>{
 	 * @param targetId the id of target
 	 * @return new friend request
 	 */
-	public FriendRequest createFriendRequest(Long sourceId, Long targetId);
+	public boolean createFriendRequest(Long sourceId, Long targetId);
 	
 	/**
 	 * accepting friend request
 	 * 
 	 * @param sourceId the id of user who wants friendship
 	 * @param targetId the id of target
+	 * @column target column
+	 * @status target status
 	 * @return true if done correctly otherwise false
 	 */
-    public boolean acceptFriendRequest(Long sourceId, Long targetId);
+	 public boolean acceptFriendRequest(Long sourceId, Long targetId, String column, String status);
 
 	/**
 	 * decline friend request
@@ -33,7 +35,7 @@ public interface FriendRequestDao extends GenericDao<FriendRequest>{
 	 * @param targetId the id of target
 	 * @return true if done correctly otherwise false
 	 */
-    public boolean declineFriendRequest(Long sourceId, Long targetId);
+	 public boolean declineFriendRequest(Long sourceId, Long targetId, String column, String status);
 
 	/**
 	 * are friends

@@ -12,7 +12,8 @@ public interface PostDao extends GenericDao<Post>{
 	 * @return post if found, otherwise null
 	 */
 	public Post findByPostId(long id);
-	/**
+	
+	/*/**
 	 * create post
 	 * 
 	 * @param title the title of post
@@ -20,8 +21,8 @@ public interface PostDao extends GenericDao<Post>{
 	 * @param posterId the id of poster
 	 * @param ownerId the id of owner of wall
 	 * @return post if created, otherwise null
-	 */
-	public Post createPost(String title, String text, long posterId, long ownerId);
+	 *
+	public Post createPost(String title, String text, long posterId, long ownerId);*/
 	/**
 	 * post on specific wall
 	 * 

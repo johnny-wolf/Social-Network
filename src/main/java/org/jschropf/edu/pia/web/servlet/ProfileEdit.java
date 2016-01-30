@@ -110,7 +110,7 @@ public class ProfileEdit extends AbstractServlet {
         	
                	String [] parts = birthdate.split(Pattern.quote("."));
                	System.out.println(parts.length);
-               	if(!(parts.length < 3) || !(parts.length > 3)){
+               	if(!(parts.length < 3) && !(parts.length > 3)){
                 	if(!(Integer.getInteger(parts[0]) > 31 || Integer.getInteger(parts[0]) < 1) || !(Integer.getInteger(parts[1]) < 1 || Integer.getInteger(parts[1]) > 12) 
     					|| Integer.getInteger(parts[2]) < 1900 ||Integer.getInteger(parts[2]) > 2016){
                 		Date bday = format.parse(birthdate);
@@ -125,7 +125,9 @@ public class ProfileEdit extends AbstractServlet {
                 System.out.println("Setting the file name: " +fileName );
                 String filePath = uploadFolder + File.separator + result.getUsername() + "/" + fileName;
                 
-                if(fileName != "" || !fileName.isEmpty()){	
+                userManager.uploadFile(fileName, filePath, uploadFolder, result, items.get(5));
+                
+                /*if(fileName != "" || !fileName.isEmpty()){	
                 	File uploadedFile = new File(filePath);
                 	System.out.println(filePath);
                 	String newName = randomString(10, fileName);
@@ -133,7 +135,7 @@ public class ProfileEdit extends AbstractServlet {
                 	System.out.println(uploadFolder + File.separator + newName);
                 	items.get(5).write(uploadedFile);
                 	userManager.updatePicture(result, newName); 
-                }
+                }*/
 
                 req.setAttribute("person", result);
                 req.setAttribute("fname", result.getfName());
@@ -142,6 +144,7 @@ public class ProfileEdit extends AbstractServlet {
                 req.setAttribute("picture", result.getPicture());
                 req.getRequestDispatcher("userProfile").forward(req, resp);  //not perfect, user should get a message registration was successful!
 		}catch(Exception e){
+			e.printStackTrace();
 			errorDispatch(e.getMessage(), req, resp);
 	    }
 	}

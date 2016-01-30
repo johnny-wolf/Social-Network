@@ -36,12 +36,12 @@ public class CommentDaoJpa extends GenericDaoJpa<Comment> implements CommentDao{
 
     
     @Override
-    public Comment createComment(String text, Long personId, Long postId) {
-        Comment comment = new Comment();
+    public void createComment(String text, Long personId, Long postId) {
+        /*Comment comment = new Comment();
         comment.setDate(new Date());
         comment.setCommenter(userDao.findById(personId));
         comment.setPostId(postId);
-        comment.setText(text);
+        comment.setText(text);*/
         
         Post post = postDao.findByPostId(postId);
 
@@ -53,16 +53,14 @@ public class CommentDaoJpa extends GenericDaoJpa<Comment> implements CommentDao{
 	    	System.out.println("failed to execute update");
 	    }
         
-        Long ownerId = post.getOwnerId();
+        /*Long ownerId = post.getOwnerId();
         Long posterId = post.getPoster().getId();
         User commenter = userDao.findById(personId);
         
         if(ownerId != personId)
             notificationDao.createNotification(commenter.getfName() + " " + commenter.getlName() + " commented on the post on your wall.", "wall", ownerId);
         if(posterId != personId)
-            notificationDao.createNotification(commenter.getfName() + " " + commenter.getlName() + " commented on the post you have written.", "wall?ownerId=" + ownerId.toString(), posterId);
-        
-        return comment;
+            notificationDao.createNotification(commenter.getfName() + " " + commenter.getlName() + " commented on the post you have written.", "wall?ownerId=" + ownerId.toString(), posterId);*/
     }
 	
     @Override

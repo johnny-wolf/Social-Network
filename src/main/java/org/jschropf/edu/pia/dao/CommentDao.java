@@ -26,7 +26,7 @@ public interface CommentDao extends GenericDao<Comment>{
 	 * @param postId the id of post
 	 * @return created comment
 	 */
-	public Comment createComment(String text, Long personId, Long postId);
+	public void createComment(String text, Long personId, Long postId);
 
 	/**
 	 * request for comments of one post

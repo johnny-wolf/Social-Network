@@ -178,7 +178,8 @@ public class Register extends AbstractServlet {
     		String filePath = uploadFolder + File.separator + result.getUsername() + "/" + fileName;
     		System.out.println("Setting the file path: " + filePath);
     		
-    		if(fileName != "" || !fileName.isEmpty()){
+    		userManager.uploadFile(fileName, filePath, uploadFolder, result, items.get(6));
+    		/*if(fileName != "" || !fileName.isEmpty()){
 
     			File uploadedFile = new File(filePath);
 	            System.out.println(filePath);
@@ -187,7 +188,7 @@ public class Register extends AbstractServlet {
 	            System.out.println(uploadFolder + File.separator + newName);
 	            items.get(6).write(uploadedFile);
 	            userManager.updatePicture(result, newName);  
-    		}
+    		}*/
     		
     		session.setAttribute("userId",result.getId() );
     		session.setAttribute("user",result.getUsername() );

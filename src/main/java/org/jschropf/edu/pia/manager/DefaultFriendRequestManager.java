@@ -1,5 +1,7 @@
 package org.jschropf.edu.pia.manager;
 
+import java.util.Date;
+
 import javax.transaction.Transactional;
 
 import org.jschropf.edu.pia.dao.FriendRequestDao;
@@ -28,7 +30,15 @@ public class DefaultFriendRequestManager implements FriendRequestManager{
 	@Override
 	public void releaseFriendRequest(Long personId, Long targetId) throws FriendRequestValidationException {
 		System.out.println("Trying to create new friend request");
-		FriendRequest newRequest = friendRequestDao.createFriendRequest(personId, targetId);
+		
+		if(friendRequestDao.createFriendRequest(personId, targetId)){
+		FriendRequest newRequest = new FriendRequest();
+        
+		newRequest.setDate(new Date());
+        newRequest.setSourceId(personId);
+        newRequest.setTargetId(targetId);
+        newRequest.setStatus("UNANSWERED");
+        
 		System.out.println(newRequest.toString());
 		System.out.println("Testing Friend Request instance if already exists");
 		
@@ -46,6 +56,7 @@ public class DefaultFriendRequestManager implements FriendRequestManager{
         }
         
         System.out.println("Friend Request saved");
+        }
 	}
 	
 	@Override
@@ -53,7 +64,7 @@ public class DefaultFriendRequestManager implements FriendRequestManager{
 		System.out.println("Starting Friend Request Transaction");
 
 		try {
-        	friendRequestDao.acceptFriendRequest(sourceId, targetId);
+        	friendRequestDao.acceptFriendRequest(sourceId, targetId, "status", "ACCEPTED");
         } catch (Exception e) {
         	System.out.println(e);
         }
@@ -66,7 +77,7 @@ public class DefaultFriendRequestManager implements FriendRequestManager{
 		System.out.println("Starting Friend Request Transaction");
 
 		try {
-        	friendRequestDao.declineFriendRequest(sourceId, targetId);
+        	friendRequestDao.declineFriendRequest(sourceId, targetId, "status", "DECLINED");
         } catch (Exception e) {
         	System.out.println(e);
         }

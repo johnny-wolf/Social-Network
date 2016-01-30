@@ -48,7 +48,7 @@ public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao{
         }
     }
     
-    public Post createPost(String title, String text, long posterId, long ownerId) {        
+    /*public Post createPost(String title, String text, long posterId, long ownerId) {        
         System.out.println("Constructing post - setting parameters");
     	Post post = new Post();
         post.setTitle(title);
@@ -60,14 +60,9 @@ public class PostDaoJpa extends GenericDaoJpa<Post> implements PostDao{
         post.setDate(new Date());
         post.setPopularity(0);
         System.out.println("Constructing post - done");
-        User poster = userDao.findById(posterId);
-        
-        System.out.println("Constructing notification"); 
-        if(notificationDao.createNotification(poster.getfName() + " " + poster.getlName() + " created a new post on your wall.", "wall", ownerId))
-        	System.out.println("Constructing notification done");
         
         return post;
-    }
+    }*/
     
     @Override
     public List<Post> topTenFor(Long personId){

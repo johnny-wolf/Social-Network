@@ -1,10 +1,13 @@
 package org.jschropf.edu.pia.manager;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.fileupload.FileItem;
 import org.jschropf.edu.pia.dao.UserDao;
 import org.jschropf.edu.pia.domain.User;
 import org.jschropf.edu.pia.domain.UserValidationException;
@@ -25,6 +28,11 @@ public class DefaultUserManager implements UserManager {
     private UserDao userDao;
 	
     private Encoder encoder;
+    
+    static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    
+    static Random rnd = new Random();
+
 
     @Autowired
     public DefaultUserManager(UserDao userDao, Encoder encoder) {
@@ -39,6 +47,26 @@ public class DefaultUserManager implements UserManager {
         return u != null && encoder.validate(password, u.getPassword());
     }
 
+    @Override
+    public boolean uploadFile(String fileName, String filePath, String uploadFolder, User result, FileItem picture){
+    	if(fileName != "" || !fileName.isEmpty()){
+    		try {
+			File uploadedFile = new File(filePath);
+            System.out.println(filePath);
+            String newName = randomString(10, fileName);
+            uploadedFile = new File(uploadFolder + File.separator + newName);
+            System.out.println(uploadFolder + File.separator + newName);
+            System.out.println("Uploading file");
+			picture.write(uploadedFile);
+			updatePicture(result, newName);
+			} catch (Exception e) {
+				return false;
+			}
+              
+		}
+    	return true;
+    }
+    
     @Override
     public void register(User newUser) throws UserValidationException {
         if(!newUser.isNew()) {
@@ -161,4 +189,27 @@ public class DefaultUserManager implements UserManager {
     public User findById(Long personId){
     	return userDao.findById(personId);
     }
+    
+    String randomString( int len, String fileName ){
+		System.out.println("Creating random name");
+		int j = fileName.length() - 1;
+		String type = "";
+		
+		//getting extension
+		while(fileName.charAt(j) != '.'){
+		   type = fileName.charAt(j) + type;
+		   j--;
+	   }
+		
+	   type = '.' + type;
+	   System.out.println("Type of file: " + type);
+	   String s = "";
+	   
+	   //creating random name
+	   for( int i = 0; i < len; i++ ) 
+		  s+= AB.charAt(rnd.nextInt(AB.length() - 1)); 
+	   type = s + type;
+	   
+	   return type;
+	}
 }

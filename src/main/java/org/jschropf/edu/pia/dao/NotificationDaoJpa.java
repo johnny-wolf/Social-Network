@@ -29,7 +29,7 @@ public class NotificationDaoJpa extends GenericDaoJpa<Notification> implements N
         }
     } 
 	
-	public boolean createNotification(String text, String url, long personId) {
+	/*public boolean createNotification(String text, String url, long personId) {
 		System.out.println("Creating Notification - Setting parameters");
         Notification notification = new Notification(text, personId, new Date(), url);
         notification.setText(text);
@@ -40,8 +40,14 @@ public class NotificationDaoJpa extends GenericDaoJpa<Notification> implements N
         em.persist(notification);
         
         return true;
-    }
+    }*/
 
+	public boolean createNotification(Notification notification) {
+        System.out.println("Creating Notification - Setting parameters - Done");
+		em.persist(notification);
+		return true;
+	}
+	
     public List<Notification> notificationsFor(long personId) {
         Query q = em.createQuery("SELECT n FROM Notification n WHERE n.personId=:personId ORDER BY n.date DESC");
         q.setParameter("personId", personId);

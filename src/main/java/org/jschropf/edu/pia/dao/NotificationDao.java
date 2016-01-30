@@ -21,12 +21,10 @@ public interface NotificationDao extends GenericDao<Notification>{
 	/**
 	 * creates notification
 	 * 
-	 * @param text the text of notification
-	 * @param url the url where it happens
-	 * @param personId the id of person for whom is the notification
+	 * @param notification notification to persist
 	 * @return true if created, otherwise false
 	 */
-	public boolean createNotification(String text, String url, long personId);
+	public boolean createNotification(Notification notification);
 	
 	/**
 	 * 

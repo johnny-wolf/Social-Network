@@ -3,6 +3,7 @@ package org.jschropf.edu.pia.manager;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.fileupload.FileItem;
 import org.jschropf.edu.pia.domain.User;
 import org.jschropf.edu.pia.domain.UserValidationException;
 
@@ -140,4 +141,16 @@ public interface UserManager {
 	 * @return User or null
 	 */
 	User findById(Long personId);
+
+	/**
+	 * Method for uploading file
+	 * 
+	 * @param fileName name of file
+	 * @param filePath path to file
+	 * @param uploadFolder upload folder
+	 * @param result user whose file it is
+	 * @param picture item with picture
+	 * @return
+	 */
+	boolean uploadFile(String fileName, String filePath, String uploadFolder, User result, FileItem picture);
 }

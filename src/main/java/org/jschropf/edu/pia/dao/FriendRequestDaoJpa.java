@@ -18,13 +18,13 @@ public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements
     }
 	
 	@Override
-    public FriendRequest createFriendRequest(Long sourceId, Long targetId){
+    public boolean createFriendRequest(Long sourceId, Long targetId){
         //if already requested
         Query q = em.createQuery("SELECT COUNT(f) FROM FriendRequest f WHERE f.sourceId=:sourceId AND f.targetId=:targetId AND f.status <> 'DECLINED'");
         q.setParameter("sourceId", sourceId);
         q.setParameter("targetId", targetId);
         if ((Long) q.getSingleResult() > 0) {
-        	return null;
+        	return false;
         }
         //this is not a mistake - cross requesting
         Query q2 = em.createQuery("SELECT COUNT(f) FROM FriendRequest f WHERE f.sourceId=:sourceId AND f.targetId=:targetId AND f.status <> 'DECLINED'");
@@ -36,23 +36,25 @@ public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements
             q3.setParameter("targetId", sourceId);
             q3.executeUpdate();
             
-            return null;
+            return false;
         }
-        FriendRequest friendRequest = new FriendRequest();
+        /*FriendRequest friendRequest = new FriendRequest();
         friendRequest.setDate(new Date());
         friendRequest.setSourceId(sourceId);
         friendRequest.setTargetId(targetId);
         friendRequest.setStatus("UNANSWERED");
         em.persist(friendRequest);
         
-        return friendRequest;
+        return friendRequest;*/
+        return true;
     }
 	
 	@Override
-    public boolean acceptFriendRequest(Long sourceId, Long targetId) {
-        Query q = em.createQuery("UPDATE FriendRequest f SET f.status='ACCEPTED' WHERE f.sourceId=:sourceId AND f.targetId=:targetId");
+    public boolean acceptFriendRequest(Long sourceId, Long targetId, String column, String status) {
+        Query q = em.createQuery("UPDATE FriendRequest f SET f."+column+"=:status WHERE f.sourceId=:sourceId AND f.targetId=:targetId");
         q.setParameter("sourceId", sourceId);
         q.setParameter("targetId", targetId);
+        q.setParameter("status", status);
         q.executeUpdate();
         em.flush();
         
@@ -60,10 +62,11 @@ public class FriendRequestDaoJpa extends GenericDaoJpa<FriendRequest> implements
     } 
     
 	@Override
-    public boolean declineFriendRequest(Long sourceId, Long targetId) {
-        Query q = em.createQuery("UPDATE FriendRequest f SET f.status='DECLINED' WHERE (f.sourceId=:sourceId AND f.targetId=:targetId) OR (f.sourceId=:targetId AND f.targetId=:sourceId)");
+    public boolean declineFriendRequest(Long sourceId, Long targetId, String column, String status) {
+        Query q = em.createQuery("UPDATE FriendRequest f SET f."+column+"=:status WHERE (f.sourceId=:sourceId AND f.targetId=:targetId) OR (f.sourceId=:targetId AND f.targetId=:sourceId)");
         q.setParameter("sourceId", sourceId);
         q.setParameter("targetId", targetId);
+        q.setParameter("status", status);
         q.executeUpdate();
         em.flush();
         
