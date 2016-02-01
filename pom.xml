@@ -4,7 +4,7 @@
     <groupId>cz.kiv.zcu.pia</groupId>
     <artifactId>jschropf</artifactId>
     <packaging>war</packaging>
-    <version>1.0.1</version>
+    <version>1.0.1b</version>
     <name>KIV/PIA Labs Example Application Project - Spring implementation</name>
     <url>https://courseware.zcu.cz/portal/studium/courseware/kiv/pia</url>
 
