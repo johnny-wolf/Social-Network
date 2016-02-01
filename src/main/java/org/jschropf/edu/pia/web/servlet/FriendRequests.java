@@ -49,6 +49,21 @@ public class FriendRequests extends AbstractServlet{
            
         List<User> unansweredFriendRequests = userManager.unansweredFriendRequestsFor(personId);
 	    
+    	List<User> friends = null;
+	    String orderParam = request.getParameter("order");
+	    boolean order = (orderParam == null || !orderParam.equals("DESC"));
+	    String orderBy = request.getParameter("orderBy");
+	    
+	    if(orderBy != null && orderBy.equals("dateOfBirth")) {
+	    	friends = userManager.friendsSortedByDateOfBirth(personId, order);
+	    } 
+	    else {
+	    	friends = userManager.friendsSortedByName(personId, order);
+	    }
+	    
+	    List<User> nonFriends = userManager.nonFriendsFor(personId);
+	    request.setAttribute("people", friends);
+        
         request.setAttribute("wallOwnerId", personId);
         request.setAttribute("friendRequests", unansweredFriendRequests);
 	    request.getRequestDispatcher("/friendRequests.jsp").forward(request, response);

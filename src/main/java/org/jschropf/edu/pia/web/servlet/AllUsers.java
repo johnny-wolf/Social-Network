@@ -58,6 +58,17 @@ public class AllUsers extends AbstractServlet{
 				people = userManager.findAllSortedByName(order);
 			}
 			
+	    	List<User> friends = null;
+		    
+		    if(orderBy != null && orderBy.equals("dateOfBirth")) {
+		    	friends = userManager.friendsSortedByDateOfBirth(personId, order);
+		    } 
+		    else {
+		    	friends = userManager.friendsSortedByName(personId, order);
+		    }
+		    
+		    request.setAttribute("people", friends);
+			
 			request.setAttribute("allPeople", people);
 			request.setAttribute("wallOwnerId", personId);
 			
